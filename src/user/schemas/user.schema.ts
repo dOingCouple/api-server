@@ -27,6 +27,14 @@ export class User {
   @Prop({ required: true })
   @Field(() => Provider, { description: 'provider' })
   provider: Provider
+
+  @Prop({ required: false })
+  @Field(() => Date, { description: '등록날짜', defaultValue: new Date() })
+  createdAt: Date
+
+  @Prop({ required: false })
+  @Field(() => Date, { description: '수정날짜', defaultValue: new Date() })
+  updatedAt: Date
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
