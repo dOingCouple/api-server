@@ -1,4 +1,4 @@
-import { plainToClass, Type } from 'class-transformer'
+import { Exclude, Expose, plainToClass, Transform } from 'class-transformer'
 import {
   IsEnum,
   IsNumber,
@@ -10,11 +10,16 @@ import {
   IsNotEmptyObject,
 } from 'class-validator'
 
+const defaultValueDecorator = (defaultValue: any) => {
+  return Transform((target: any) => target || defaultValue)
+}
+
 enum Environment {
   Mock = 'mock',
   Local = 'local',
   Dev = 'dev',
   Production = 'prod',
+  Test = 'test',
 }
 
 class Mongo {
@@ -45,6 +50,7 @@ export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToClass(EnvironmentVariables, config, {
     enableImplicitConversion: true,
   })
+
   const errors = validateSync(validatedConfig, { skipMissingProperties: true })
 
   if (errors.length > 0) {
