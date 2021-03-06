@@ -3,8 +3,26 @@
 # ------------------------------------------------------
 
 type User {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """uuid"""
+  uuid: String!
+
+  """이름"""
+  name: String!
+
+  """이메일"""
+  email: String!
+
+  """프로필 이미지 url"""
+  photoUrl: String!
+
+  """provider"""
+  provider: Provider!
+}
+
+"""회원가입시 provider"""
+enum Provider {
+  GOOGLE
+  KAKAO
 }
 
 type Query {
@@ -13,14 +31,24 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
+  """앱용 회원가입"""
+  signup(signupInput: SignupInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
 }
 
-input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input SignupInput {
+  """사용자 이름"""
+  name: String!
+
+  """사용자 이메일"""
+  email: String!
+
+  """사용자 프로필 이미지 url"""
+  photoUrl: String!
+
+  """회원가입 provider"""
+  provider: Provider!
 }
 
 input UpdateUserInput {
