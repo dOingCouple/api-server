@@ -39,7 +39,6 @@ jobs:
         key: ${{ secrets.REMOTE_KEY }}
         port: ${{ secrets.REMOTE_PORT }}
         script: |
-          whoami
-          ls
-
-
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+          ./deploy/api-server.sh
