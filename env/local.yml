@@ -3,3 +3,11 @@ mongo:
   user: admin
   password: admin123
   haha: dkfajdks
+
+jwt:
+  secret: HAHA
+  expiresIn: 2h
+
+graphql: 
+  playground: true
+  schemaFile: schema.gql

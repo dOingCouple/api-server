@@ -8,13 +8,17 @@ export type UserDocument = User & Document
 @Schema()
 @ObjectType()
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   @Field(() => String, { description: 'uuid' })
   uuid: string
 
   @Prop({ required: true })
   @Field(() => String, { description: '이름' })
   name: string
+
+  @Prop({ required: true, unique: true })
+  @Field(() => String, { description: '닉네임' })
+  nickName: string
 
   @Prop({ required: true })
   @Field(() => String, { description: '이메일' })

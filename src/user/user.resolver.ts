@@ -3,6 +3,8 @@ import { UserService } from './user.service'
 import { User } from './schemas/user.schema'
 import { SignupInput } from '~/user/dto/signup.input'
 import { UpdateUserInput } from './dto/update-user.input'
+import { AuthGuard } from '~/auth/guard/auth.guard'
+import { UseGuards } from '@nestjs/common'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -15,8 +17,9 @@ export class UserResolver {
     return this.userService.create(signupInput)
   }
 
+  @UseGuards(AuthGuard)
   @Query(() => [User], { name: 'users' })
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.userService.findAll()
   }
 

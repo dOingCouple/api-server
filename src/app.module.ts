@@ -7,13 +7,21 @@ import { AppService } from '~/app.service'
 import { UserModule } from '~/user/user.module'
 import configuration from '~/config/configuration'
 import { validate } from '~/config/env.validation'
+import { CourseModule } from './course/course.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
-      context: ({ req }) => ({ currentUser: req.user }),
-      playground: true,
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          autoSchemaFile: configService.get<string>('graphql.schemaFile'),
+          playground: configService.get<boolean>('graphql.playground'),
+          context: ({ req }) => ({ currentUser: req.user }),
+        }
+      },
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({
       load: [configuration],
@@ -30,11 +38,14 @@ import { validate } from '~/config/env.validation'
             user: configService.get<string>('mongo.user'),
             password: configService.get<string>('mongo.password'),
           },
+          useCreateIndex: true,
         }
       },
       inject: [ConfigService],
     }),
     UserModule,
+    CourseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

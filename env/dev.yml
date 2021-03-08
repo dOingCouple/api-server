@@ -2,3 +2,11 @@ mongo:
   uri: mongodb://192.168.0.24:28001/date
   user: admin
   password: admin123
+
+jwt:
+  secret: HAHA
+  expiresIn: 2h
+
+graphql: 
+  playground: true
+  schemaFile: schema.gql

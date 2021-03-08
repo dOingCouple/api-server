@@ -7,23 +7,28 @@ import { SignupInput } from '~/user/dto/signup.input'
 import { UpdateUserInput } from './dto/update-user.input'
 import { User, UserDocument } from './schemas/user.schema'
 import { from } from 'rxjs'
+import {} from 'rxjs/operators'
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   create(signupInput: SignupInput): Promise<User> {
-    return this.userModel.create({
-      uuid: uuid(),
-      name: signupInput.name,
-      email: signupInput.email,
-      photoUrl: signupInput.photoUrl,
-      provider: signupInput.provider,
-    })
+    return from(
+      this.userModel.create({
+        uuid: uuid(),
+        name: signupInput.name,
+        email: signupInput.email,
+        photoUrl: signupInput.photoUrl,
+        provider: signupInput.provider,
+      })
+    )
+      .pipe()
+      .toPromise()
   }
 
-  findAll() {
-    return `This action returns all user`
+  findAll(): Promise<User[]> {
+    return this.userModel.find().exec()
   }
 
   findOne(id: number) {
