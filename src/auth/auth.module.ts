@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { UserModule } from '~/user/user.module'
 import { AuthService } from './auth.service'
-import { AuthResolver } from './auth.resolver';
+import { AuthResolver } from './auth.resolver'
 
 @Module({
   imports: [
