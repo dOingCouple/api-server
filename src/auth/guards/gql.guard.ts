@@ -29,13 +29,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     if (err || !user) {
       throw err || new UnauthorizedException()
     }
-    // from(this.userService.findOneByUuid(payload.uuid))
-    // .pipe(
-    //   switchMap((user) =>
-    //     user ? of(user) : throwError(new UnauthorizedException())
-    //   )
-    // )
-    // .toPromise()
+
     const gqlContext = GqlExecutionContext.create(context)
     gqlContext.getContext().req.user = user
     return user
