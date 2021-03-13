@@ -15,8 +15,8 @@ describe('AppController', () => {
   })
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!')
+    it('should return "Graphql Server"', () => {
+      expect(appController.root().message).toBe('Graphql Server')
     })
   })
 })
