@@ -5,8 +5,9 @@ import {
 } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { AuthGuard } from '@nestjs/passport'
-import { from } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { from, of, throwError } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
+import { User } from '~/user/schemas/user.schema'
 import { UserService } from '~/user/user.service'
 
 @Injectable()
@@ -19,20 +20,24 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context)
   }
 
-  getRequest(context: ExecutionContext): Promise<Request> {
+  getRequest(context: ExecutionContext): Request {
     const ctx = GqlExecutionContext.create(context)
-    return from(
-      this.userService.findOneByUuid('bc6dcf43-2622-411c-85e9-94e8f96390cf')
-    )
-      .pipe(map(() => ctx.getContext().req))
-      .toPromise()
-    // return ctx.getContext().req
+    return ctx.getContext().req
   }
 
-  handleRequest(err: unknown, user: any, info: unknown) {
+  handleRequest(err: unknown, user: any, info: unknown, context, status) {
     if (err || !user) {
       throw err || new UnauthorizedException()
     }
+    // from(this.userService.findOneByUuid(payload.uuid))
+    // .pipe(
+    //   switchMap((user) =>
+    //     user ? of(user) : throwError(new UnauthorizedException())
+    //   )
+    // )
+    // .toPromise()
+    const gqlContext = GqlExecutionContext.create(context)
+    gqlContext.getContext().req.user = user
     return user
   }
 }

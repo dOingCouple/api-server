@@ -4,7 +4,6 @@ import { SignInInput } from './sign-in.input'
 @InputType()
 export class SignUpInput extends PickType(SignInInput, [
   'email',
-  'id',
   'provider',
 ] as const) {
   @Field(() => String, { description: '이름' })

@@ -1,7 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 import { UserService } from './user.service'
 import { User } from './schemas/user.schema'
-import { SignupInput } from '~/user/dto/signup.input'
 import { UpdateUserInput } from './dto/update-user.input'
 import { AuthGuard } from '~/auth/guards/auth.guard'
 import { UseGuards } from '@nestjs/common'
@@ -11,13 +10,6 @@ import { GqlAuthGuard } from '~/auth/guards/gql.guard'
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
-
-  @Mutation(() => User, {
-    description: '앱용 회원가입',
-  })
-  signup(@Args('signupInput') signupInput: SignupInput): Promise<User> {
-    return this.userService.create(signupInput)
-  }
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [User], { name: 'users' })

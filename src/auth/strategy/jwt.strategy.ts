@@ -2,11 +2,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { from } from 'rxjs'
+import { from, of } from 'rxjs'
+import { UserService } from '~/user/user.service'
+import { switchMap } from 'rxjs/operators'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -14,14 +19,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username }
+  async validate(payload: { uuid: string }) {
+    return from(this.userService.findOneByUuid(payload.uuid)).toPromise()
   }
 
   authenticate(promiseRequest: any, options) {
-    console.log(promiseRequest !== null)
-    from(promiseRequest).subscribe((req) =>
-      super.authenticate(req as any, options)
-    )
+    super.authenticate(promiseRequest, options)
+    // from(promiseRequest).subscribe((req) =>
+    //   super.authenticate(req as any, options)
+    // )
   }
 }

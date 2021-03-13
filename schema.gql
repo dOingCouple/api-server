@@ -65,13 +65,13 @@ type Course {
   updatedAt: DateTime!
 }
 
-type BaseOut {
-  code: Int!
-  message: String!
-}
-
 type Me {
   uuid: String!
+}
+
+type SignInOutput {
+  """jwt token"""
+  accessToken: String!
 }
 
 type Query {
@@ -85,8 +85,6 @@ type Query {
 }
 
 type Mutation {
-  """앱용 회원가입"""
-  signup(signupInput: SignupInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createCourse(createCourseInput: CreateCourseInput!): Course!
@@ -94,24 +92,10 @@ type Mutation {
   removeCourse(id: Int!): Course!
 
   """로그인"""
-  signIn(signInInput: SignInInput!): BaseOut!
+  signIn(signInInput: SignInInput!): SignInOutput!
 
   """회원가입"""
-  signUp(signUpInput: SignUpInput!): BaseOut!
-}
-
-input SignupInput {
-  """사용자 이름"""
-  name: String!
-
-  """사용자 이메일"""
-  email: String!
-
-  """사용자 프로필 이미지 url"""
-  photoUrl: String!
-
-  """회원가입 provider"""
-  provider: Provider!
+  signUp(signUpInput: SignUpInput!): Me!
 }
 
 input UpdateUserInput {
@@ -138,13 +122,11 @@ input UpdateCourseInput {
 }
 
 input SignInInput {
-  id: Int!
   email: String!
   provider: Provider!
 }
 
 input SignUpInput {
-  id: Int!
   email: String!
   provider: Provider!
 

@@ -8,19 +8,18 @@ import { UpdateUserInput } from './dto/update-user.input'
 import { User, UserDocument } from './schemas/user.schema'
 import { from } from 'rxjs'
 import {} from 'rxjs/operators'
+import { Provider } from '~/common/constants'
+import { SignUpInput } from '~/auth/dto/sign-up.input'
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  create(signupInput: SignupInput): Promise<User> {
+  create(signUpInput: SignUpInput): Promise<User> {
     return from(
       this.userModel.create({
         uuid: uuid(),
-        name: signupInput.name,
-        email: signupInput.email,
-        photoUrl: signupInput.photoUrl,
-        provider: signupInput.provider,
+        ...signUpInput,
       })
     )
       .pipe()
@@ -29,6 +28,16 @@ export class UserService {
 
   findOneByUuid(uuid: string): Promise<User> {
     return this.userModel.findOne({ uuid }).exec()
+  }
+
+  findOneByEmailAndProvider({
+    email,
+    provider,
+  }: {
+    email: string
+    provider: Provider
+  }): Promise<User | undefined> {
+    return this.userModel.findOne({ email, provider }).exec()
   }
 
   findAll(): Promise<User[]> {

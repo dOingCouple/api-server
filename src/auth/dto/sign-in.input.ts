@@ -3,9 +3,6 @@ import { Provider } from '~/common/constants'
 
 @InputType()
 export class SignInInput {
-  @Field(() => Int)
-  id: number
-
   @Field(() => String)
   email: string
 

@@ -6,7 +6,7 @@ mongo:
 
 jwt:
   secret: HAHA
-  expiresIn: 2h
+  expiresIn: '2d'
 
 graphql: 
   playground: true
