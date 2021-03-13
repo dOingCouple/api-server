@@ -27,6 +27,10 @@ export class UserService {
       .toPromise()
   }
 
+  findOneByUuid(uuid: string): Promise<User> {
+    return this.userModel.findOne({ uuid }).exec()
+  }
+
   findAll(): Promise<User[]> {
     return this.userModel.find().exec()
   }

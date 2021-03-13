@@ -21,6 +21,9 @@ type User {
   """provider"""
   provider: Provider!
 
+  """권한"""
+  role: Role!
+
   """등록날짜"""
   createdAt: DateTime!
 
@@ -32,6 +35,12 @@ type User {
 enum Provider {
   GOOGLE
   KAKAO
+}
+
+"""권한"""
+enum Role {
+  ADMIN
+  USER
 }
 
 """
@@ -56,11 +65,23 @@ type Course {
   updatedAt: DateTime!
 }
 
+type BaseOut {
+  code: Int!
+  message: String!
+}
+
+type Me {
+  uuid: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
   courseList: [Course!]!
   course(id: Int!): Course!
+
+  """자기 정보 가져오기"""
+  me: Me!
 }
 
 type Mutation {
@@ -71,6 +92,12 @@ type Mutation {
   createCourse(createCourseInput: CreateCourseInput!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!): Course!
   removeCourse(id: Int!): Course!
+
+  """로그인"""
+  signIn(signInInput: SignInInput!): BaseOut!
+
+  """회원가입"""
+  signUp(signUpInput: SignUpInput!): BaseOut!
 }
 
 input SignupInput {
@@ -108,4 +135,25 @@ input UpdateCourseInput {
   """내용"""
   content: String
   id: Int!
+}
+
+input SignInInput {
+  id: Int!
+  email: String!
+  provider: Provider!
+}
+
+input SignUpInput {
+  id: Int!
+  email: String!
+  provider: Provider!
+
+  """이름"""
+  name: String!
+
+  """닉네임"""
+  nickName: String!
+
+  """프로필 이미지 url"""
+  photoUrl: String!
 }

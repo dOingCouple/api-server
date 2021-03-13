@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { Provider } from '~/common/constants'
+import { Provider, Role } from '~/common/constants'
 
 export type UserDocument = User & Document
 
@@ -31,6 +31,10 @@ export class User {
   @Prop({ required: true })
   @Field(() => Provider, { description: 'provider' })
   provider: Provider
+
+  @Prop({ required: true })
+  @Field(() => Role, { description: '권한', defaultValue: Role.USER })
+  role: Role
 
   @Prop({ required: false })
   @Field(() => Date, { description: '등록날짜', defaultValue: new Date() })

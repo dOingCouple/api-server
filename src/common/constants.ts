@@ -9,3 +9,13 @@ registerEnumType(Provider, {
   name: 'Provider',
   description: '회원가입시 provider',
 })
+
+export enum Role {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
+registerEnumType(Role, {
+  name: 'Role',
+  description: '권한',
+})
