@@ -1,7 +1,5 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { sign } from 'crypto'
-import { BaseOut } from '~/common/dto/base.out'
 import { User } from '~/user/schemas/user.schema'
 import { AuthService } from './auth.service'
 import { CurrentUser } from './decorators/current.user'
@@ -34,6 +32,6 @@ export class AuthResolver {
     description: '자기 정보 가져오기',
   })
   me(@CurrentUser() user: User): Promise<Me> {
-    return Promise.resolve({ uuid: user.uuid })
+    return Promise.resolve({ nickName: user.nickName, uuid: user.uuid })
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { from, of, throwError } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
@@ -24,34 +28,18 @@ export class AuthService {
         switchMap((user) =>
           user
             ? from(this.jwtService.signAsync({ uuid: user.uuid }))
-            : throwError(new UnauthorizedException())
+            : throwError(
+                new HttpException({ ...signInInput }, ErrorType.NOT_FOUND_USER)
+              )
         ),
         map((jwt) => ({ accessToken: jwt }))
       )
       .toPromise()
-    //   return from(this.jwtService.signAsync(signInInput))
-    //     .pipe(
-    //       switchMap((jwt: string) =>
-    //         from(
-    //           this.userService.findOneByEmailAndProvider(
-    //             signInInput.email,
-    //             signInInput.provider
-    //           )
-    //         ).pipe(map((user: User | undefined) => ({ user, jwt })))
-    //       ),
-    //       map(
-    //         ({ user, jwt }): SignInOutput => ({
-    //           accessToken: jwt,
-    //           code: !user ? ErrorType.REQUIRED_MORE_INFO : ErrorType.NOTHING,
-    //         })
-    //       )
-    //     )
-    //     .toPromise()
   }
 
   signUp(signUpInput: SignUpInput): Promise<Me> {
     return from(this.userService.create(signUpInput))
-      .pipe(map((user): Me => ({ ...user })))
+      .pipe(map((user): Me => ({ nickName: user.nickName, uuid: user.uuid })))
       .toPromise()
   }
 }

@@ -19,3 +19,13 @@ registerEnumType(Role, {
   name: 'Role',
   description: '권한',
 })
+
+export enum OS {
+  IOS = 'ios',
+  ANDROID = 'android',
+}
+
+registerEnumType(OS, {
+  name: 'OS',
+  description: '운영체제',
+})
