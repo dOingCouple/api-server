@@ -6,9 +6,10 @@ import { AppController } from '~/app.controller'
 import { AppService } from '~/app.service'
 import { UserModule } from '~/user/user.module'
 import configuration from '~/config/configuration'
-import { validate } from '~/config/env.validation'
+import { Environment, validate } from '~/config/env.validation'
 import { CourseModule } from './course/course.module'
 import { AuthModule } from './auth/auth.module'
+import { GraphQLError } from 'graphql'
 
 @Module({
   imports: [
@@ -19,6 +20,16 @@ import { AuthModule } from './auth/auth.module'
           autoSchemaFile: configService.get<string>('graphql.schemaFile'),
           playground: configService.get<boolean>('graphql.playground'),
           context: ({ req }) => ({ currentUser: req.user }),
+          formatError: (error: GraphQLError) => {
+            return configService.get('NODE_ENV') === Environment.Local
+              ? error
+              : {
+                  message:
+                    error.extensions.exception.response.message ||
+                    error.message,
+                  code: error.extensions.exception.status,
+                }
+          },
         }
       },
       inject: [ConfigService],

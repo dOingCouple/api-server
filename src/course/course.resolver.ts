@@ -3,6 +3,7 @@ import { CourseService } from './course.service'
 import { Course } from './schemas/course.schema'
 import { CreateCourseInput } from './dto/create-course.input'
 import { UpdateCourseInput } from './dto/update-course.input'
+import { HttpException, HttpStatus } from '@nestjs/common'
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -17,7 +18,8 @@ export class CourseResolver {
 
   @Query(() => [Course], { name: 'courseList' })
   findAll(): Promise<Course[]> {
-    return this.courseService.findAll()
+    throw new HttpException('Forbidden', 12312312)
+    // return this.courseService.findAll()
   }
 
   @Query(() => Course, { name: 'course' })

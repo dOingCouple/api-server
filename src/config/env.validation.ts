@@ -14,7 +14,7 @@ const defaultValueDecorator = (defaultValue: any) => {
   return Transform((target: any) => target || defaultValue)
 }
 
-enum Environment {
+export enum Environment {
   Mock = 'mock',
   Local = 'local',
   Dev = 'dev',
