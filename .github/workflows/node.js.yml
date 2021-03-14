@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: codecov/codecov-action@v1
+    - uses: iansu/codecov-action-node@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
