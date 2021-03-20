@@ -6,13 +6,14 @@ import { AppController } from '~/app.controller'
 import { AppService } from '~/app.service'
 import { UserModule } from '~/user/user.module'
 import configuration from '~/config/configuration'
-import { Environment, validate } from '~/config/env.validation'
+import { validate } from '~/config/env.validation'
 import { CourseModule } from './course/course.module'
 import { AuthModule } from './auth/auth.module'
 import { GraphQLError } from 'graphql'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/guards/role.guard'
 import { RedisModule } from 'nestjs-redis/dist/redis.module'
+import { Environment } from './config/types/env.types'
 
 @Module({
   imports: [

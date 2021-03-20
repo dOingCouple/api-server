@@ -1,3 +1,6 @@
+server:
+  port: 3000
+
 mongo:
   uri: mongodb://192.168.0.24:28001/date
   user: admin

@@ -1,0 +1,95 @@
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsNumber,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from 'class-validator'
+
+export enum Environment {
+  Mock = 'mock',
+  Local = 'local',
+  Dev = 'dev',
+  Production = 'prod',
+  Test = 'test',
+}
+
+class Server {
+  @IsNumber()
+  @IsNotEmpty()
+  port: number
+}
+
+class Mongo {
+  @IsNotEmpty()
+  @IsString()
+  uri: string
+
+  @IsNotEmpty()
+  @IsString()
+  user: string
+
+  @IsNotEmpty()
+  @IsString()
+  password: string
+}
+
+class Jwt {
+  @IsNotEmpty()
+  @IsString()
+  secret: string
+  expiresIn: string
+}
+
+class Graphql {
+  @IsBoolean()
+  @IsNotEmpty()
+  playground: boolean
+
+  @IsString()
+  @IsNotEmpty()
+  schemaFile: string
+}
+
+class Redis {
+  @IsString()
+  @IsNotEmpty()
+  host: string
+
+  @IsNumber()
+  @IsNotEmpty()
+  port: number
+}
+
+export class EnvironmentVariables {
+  // @IsEnum(Environment)
+  NODE_ENV: Environment
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  server: Server
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  mongo: Mongo
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  jwt: Jwt
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  graphql: Graphql
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  redis: Redis
+}
