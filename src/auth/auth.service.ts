@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { from, of, throwError } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
+import { catchError, map, switchMap, tap } from 'rxjs/operators'
 import { flatMap } from 'rxjs/internal/operators'
 import { ErrorType } from '~/common/error.type'
 import { User } from '~/user/schemas/user.schema'
@@ -14,12 +14,14 @@ import { Me } from './dto/me.out'
 import { SignInInput } from './dto/sign-in.input'
 import { SignInOutput } from './dto/sign-in.output'
 import { SignUpInput } from './dto/sign-up.input'
+import { RedisService } from 'nestjs-redis'
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly redisService: RedisService
   ) {}
 
   signIn(signInInput: SignInInput): Promise<SignInOutput> {
@@ -32,6 +34,9 @@ export class AuthService {
                 new HttpException({ ...signInInput }, ErrorType.NOT_FOUND_USER)
               )
         ),
+        tap((jwt) => {
+          this.redisService.getClient().set(jwt, jwt, 'EX', 600)
+        }),
         map((jwt) => ({ accessToken: jwt }))
       )
       .toPromise()

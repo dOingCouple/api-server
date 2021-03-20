@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import { from, of } from 'rxjs'
 import { UserService } from '~/user/user.service'
 import { switchMap } from 'rxjs/operators'
+import { User } from '~/user/schemas/user.schema'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload: { uuid: string }) {
+  async validate(payload: { uuid: string }): Promise<User> {
     return from(this.userService.findOneByUuid(payload.uuid)).toPromise()
   }
 

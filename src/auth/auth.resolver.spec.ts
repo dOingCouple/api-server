@@ -2,6 +2,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule, JwtService } from '@nestjs/jwt'
 import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
+import { RedisModule } from 'nestjs-redis'
 import { UserModule } from '~/user/user.module'
 import { UserService } from '~/user/user.service'
 import { AuthResolver } from './auth.resolver'
@@ -25,6 +26,16 @@ describe('AuthResolver', () => {
               signOptions: {
                 expiresIn: configService.get<string>('jwt.expiresIn'),
               },
+            }
+          },
+          inject: [ConfigService],
+        }),
+        RedisModule.forRootAsync({
+          imports: [ConfigModule],
+          useFactory: (configService: ConfigService) => {
+            return {
+              host: configService.get<string>('redis.host'),
+              port: configService.get<number>('redis.port'),
             }
           },
           inject: [ConfigService],

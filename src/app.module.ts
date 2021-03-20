@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module'
 import { GraphQLError } from 'graphql'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/guards/role.guard'
+import { RedisModule } from 'nestjs-redis/dist/redis.module'
 
 @Module({
   imports: [
@@ -52,6 +53,16 @@ import { RolesGuard } from './auth/guards/role.guard'
             password: configService.get<string>('mongo.password'),
           },
           useCreateIndex: true,
+        }
+      },
+      inject: [ConfigService],
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          host: configService.get<string>('redis.host'),
+          port: configService.get<number>('redis.port'),
         }
       },
       inject: [ConfigService],
