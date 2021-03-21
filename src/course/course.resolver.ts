@@ -1,9 +1,19 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Subscription,
+} from '@nestjs/graphql'
 import { CourseService } from './course.service'
 import { Course } from './schemas/course.schema'
 import { CreateCourseInput } from './dto/create-course.input'
 import { UpdateCourseInput } from './dto/update-course.input'
 import { HttpException, HttpStatus } from '@nestjs/common'
+import { PubSub } from 'graphql-subscriptions'
+
+const pubsub = new PubSub()
 
 @Resolver(() => Course)
 export class CourseResolver {
@@ -37,5 +47,10 @@ export class CourseResolver {
   @Mutation(() => Course)
   removeCourse(@Args('id', { type: () => Int }) id: number) {
     return this.courseService.remove(id)
+  }
+
+  @Subscription(() => Course)
+  newCourse() {
+    pubsub.asyncIterator('aha')
   }
 }

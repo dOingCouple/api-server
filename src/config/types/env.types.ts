@@ -17,10 +17,37 @@ export enum Environment {
   Test = 'test',
 }
 
-class Server {
+class ServerHttp {
   @IsNumber()
   @IsNotEmpty()
   port: number
+}
+
+class ServerSsl {
+  @IsNotEmpty()
+  @IsString()
+  privkeyPath: string
+
+  @IsNotEmpty()
+  @IsString()
+  pubPath: string
+}
+
+class Server {
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  http: ServerHttp
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  https: ServerHttp
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  ssl: ServerSsl
 }
 
 class Mongo {

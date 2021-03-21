@@ -177,3 +177,7 @@ input SignUpDeviceInput {
   """버전 정보"""
   version: String!
 }
+
+type Subscription {
+  newCourse: Course!
+}

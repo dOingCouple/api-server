@@ -34,6 +34,7 @@ import { Environment } from './config/types/env.types'
                   code: error.extensions.exception.status,
                 }
           },
+          installSubscriptionHandlers: true,
         }
       },
       inject: [ConfigService],

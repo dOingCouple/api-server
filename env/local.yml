@@ -1,5 +1,11 @@
 server:
-  port: 3000
+  http:
+    port: 3000
+  https:
+    port: 3001
+  ssl:
+    privkeyPath: ../ssl/privkey.pem
+    pubPath: ../ssl/cert.pem
 
 mongo:
   uri: mongodb://192.168.0.24:28001/date
