@@ -35,6 +35,10 @@ import { Environment } from './config/types/env.types'
                 }
           },
           installSubscriptionHandlers: true,
+          uploads: {
+            maxFileSize: 10000000,
+            maxFiles: 1,
+          },
         }
       },
       inject: [ConfigService],

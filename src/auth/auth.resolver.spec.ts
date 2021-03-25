@@ -45,6 +45,7 @@ describe('AuthResolver', () => {
         AuthResolver,
         AuthService,
         UserService,
+        ConfigService,
         {
           provide: getModelToken('User'),
           useValue: new MockUser(),

@@ -10,7 +10,7 @@ export class Device {
 
   @Prop({ required: true })
   @Field(() => String, { description: '기기 정보' })
-  model: string
+  name: string
 
   @Prop({ required: true })
   @Field(() => String, { description: '버전 정보' })

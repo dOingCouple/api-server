@@ -14,7 +14,8 @@ mongo:
 
 jwt:
   secret: HAHA
-  expiresIn: 
+  # 60 * 60 * 24 * 30 = 30일치
+  expiredSecond: 2592000
 
 graphql: 
   playground: true

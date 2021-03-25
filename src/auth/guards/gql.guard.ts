@@ -5,14 +5,11 @@ import {
 } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { AuthGuard } from '@nestjs/passport'
-import { from, of, throwError } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
-import { User } from '~/user/schemas/user.schema'
-import { UserService } from '~/user/user.service'
+import { AuthService } from '../auth.service'
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly authService: AuthService) {
     super()
   }
 
@@ -25,7 +22,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     return ctx.getContext().req
   }
 
-  handleRequest(err: unknown, user: any, info: unknown, context, status) {
+  handleRequest(err: unknown, user: any, info: unknown, context) {
     if (err || !user) {
       throw err || new UnauthorizedException()
     }

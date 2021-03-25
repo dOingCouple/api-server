@@ -3,7 +3,7 @@ import { Prop } from '@nestjs/mongoose'
 import { OS } from '~/common/constants'
 
 @InputType()
-export class SignUpDeviceInput {
+export class SignInDeviceInput {
   @Prop({ required: true })
   @Field(() => OS, { description: 'Ios/Android' })
   os: OS

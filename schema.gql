@@ -2,23 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Device {
-  """Ios/Android"""
-  os: OS!
-
-  """기기 정보"""
-  model: String!
-
-  """버전 정보"""
-  version: String!
-}
-
-"""운영체제"""
-enum OS {
-  IOS
-  ANDROID
-}
-
 type User {
   """uuid"""
   uuid: String!
@@ -40,9 +23,6 @@ type User {
 
   """권한"""
   role: Role!
-
-  """장비 정보"""
-  device: Device!
 
   """등록날짜"""
   createdAt: DateTime!
@@ -148,6 +128,26 @@ input UpdateCourseInput {
 input SignInInput {
   email: String!
   provider: Provider!
+
+  """장비 정보"""
+  device: SignInDeviceInput
+}
+
+input SignInDeviceInput {
+  """Ios/Android"""
+  os: OS!
+
+  """기기 정보"""
+  model: String!
+
+  """버전 정보"""
+  version: String!
+}
+
+"""운영체제"""
+enum OS {
+  IOS
+  ANDROID
 }
 
 input SignUpInput {
@@ -162,20 +162,6 @@ input SignUpInput {
 
   """프로필 이미지 url"""
   photoUrl: String!
-
-  """장비 정보"""
-  device: SignUpDeviceInput!
-}
-
-input SignUpDeviceInput {
-  """Ios/Android"""
-  os: OS!
-
-  """기기 정보"""
-  model: String!
-
-  """버전 정보"""
-  version: String!
 }
 
 type Subscription {

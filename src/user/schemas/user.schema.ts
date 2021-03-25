@@ -37,10 +37,6 @@ export class User {
   @Field(() => Role, { description: '권한', defaultValue: Role.USER })
   role: Role
 
-  @Prop({ required: true })
-  @Field(() => Device, { description: '장비 정보' })
-  device: Device
-
   @Prop({ required: false })
   @Field(() => Date, { description: '등록날짜', defaultValue: new Date() })
   createdAt: Date

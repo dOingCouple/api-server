@@ -42,6 +42,7 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         UserService,
+        ConfigService,
         {
           provide: getModelToken('User'),
           useValue: new MockUser(),
@@ -54,5 +55,9 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined()
+  })
+
+  it('should be get session key', () => {
+    expect(service.getSessionKey('HAHA')).toEqual('SESSION:HAHA')
   })
 })

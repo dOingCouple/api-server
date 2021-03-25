@@ -1,7 +1,5 @@
 import { InputType, Field, PickType } from '@nestjs/graphql'
-import { Device } from '~/user/schemas/user.device.schema'
 import { SignInInput } from './sign-in.input'
-import { SignUpDeviceInput } from './sign-up.device.input'
 
 @InputType()
 export class SignUpInput extends PickType(SignInInput, [
@@ -16,7 +14,4 @@ export class SignUpInput extends PickType(SignInInput, [
 
   @Field(() => String, { description: '프로필 이미지 url' })
   photoUrl: string
-
-  @Field(() => SignUpDeviceInput, { description: '장비 정보' })
-  device: SignUpDeviceInput
 }

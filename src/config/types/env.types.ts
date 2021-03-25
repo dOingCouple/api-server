@@ -68,7 +68,7 @@ class Jwt {
   @IsNotEmpty()
   @IsString()
   secret: string
-  expiresIn: string
+  expiredSecond: number
 }
 
 class Graphql {
