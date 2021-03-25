@@ -31,7 +31,9 @@ export class AuthService {
     return from(this.userService.findOneByEmailAndProvider({ ...signInInput }))
       .pipe(
         switchMap((user) => {
-          const hash = createHash('sha256').digest('base64')
+          const hash = createHash('sha256')
+            .update(String(new Date().getTime))
+            .digest('base64')
           return user
             ? from(this.jwtService.signAsync({ uuid: user.uuid, hash })).pipe(
                 tap(() => this.setSession(user.uuid, hash))
