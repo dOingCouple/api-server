@@ -24,3 +24,10 @@ graphql:
 redis: 
   host: 192.168.0.24
   port: 6401
+
+oracle:
+  objectStorage:
+    configFilePath: ~/.oci/config
+    baseUrl: https://objectstorage.ap-seoul-1.oraclecloud.com
+    namespace: cnmz3th5qata
+    bucketName: couple-bucket

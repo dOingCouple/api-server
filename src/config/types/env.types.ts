@@ -91,6 +91,31 @@ class Redis {
   port: number
 }
 
+export class OracleObjectStorage {
+  @IsString()
+  @IsNotEmpty()
+  configFilePath: string
+
+  @IsString()
+  @IsNotEmpty()
+  baseUrl: string
+
+  @IsString()
+  @IsNotEmpty()
+  namespace: string
+
+  @IsString()
+  @IsNotEmpty()
+  bucketName: string
+}
+
+class Oracle {
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  objectStorage: OracleObjectStorage
+}
+
 export class EnvironmentVariables {
   // @IsEnum(Environment)
   NODE_ENV: Environment
@@ -119,4 +144,9 @@ export class EnvironmentVariables {
   @IsObject()
   @ValidateNested()
   redis: Redis
+
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  oracle: Oracle
 }
