@@ -10,10 +10,9 @@ import { validate } from '~/config/env.validation'
 import { CourseModule } from './course/course.module'
 import { AuthModule } from './auth/auth.module'
 import { GraphQLError } from 'graphql'
-import { APP_GUARD } from '@nestjs/core'
-import { RolesGuard } from './auth/guards/role.guard'
 import { RedisModule } from 'nestjs-redis/dist/redis.module'
 import { Environment } from './config/types/env.types'
+import { FileModule } from './file/file.module'
 
 @Module({
   imports: [
@@ -35,10 +34,6 @@ import { Environment } from './config/types/env.types'
                 }
           },
           installSubscriptionHandlers: true,
-          uploads: {
-            maxFileSize: 10000000,
-            maxFiles: 1,
-          },
         }
       },
       inject: [ConfigService],
@@ -76,6 +71,7 @@ import { Environment } from './config/types/env.types'
     UserModule,
     CourseModule,
     AuthModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

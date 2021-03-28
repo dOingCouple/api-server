@@ -16,7 +16,7 @@ type User {
   email: String!
 
   """프로필 이미지 url"""
-  photoUrl: String!
+  profileImageUrl: String!
 
   """provider"""
   provider: Provider!
@@ -78,6 +78,11 @@ type SignInOutput {
   accessToken: String!
 }
 
+type FileListOut {
+  """내용물"""
+  content: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
@@ -86,10 +91,10 @@ type Query {
 
   """자기 정보 가져오기"""
   me: Me!
+  findObject: FileListOut!
 }
 
 type Mutation {
-  updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createCourse(createCourseInput: CreateCourseInput!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!): Course!
@@ -100,12 +105,6 @@ type Mutation {
 
   """회원가입"""
   signUp(signUpInput: SignUpInput!): Me!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateCourseInput {
@@ -161,7 +160,7 @@ input SignUpInput {
   nickName: String!
 
   """프로필 이미지 url"""
-  photoUrl: String!
+  profileImageUrl: String!
 }
 
 type Subscription {

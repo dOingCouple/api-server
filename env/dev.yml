@@ -27,7 +27,7 @@ redis:
 
 oracle:
   objectStorage:
-    configFilePath: ~/.oci/config
+    configFilePath: /home/segeg/.oci/config
     baseUrl: https://objectstorage.ap-seoul-1.oraclecloud.com
     namespace: cnmz3th5qata
     bucketName: couple-bucket

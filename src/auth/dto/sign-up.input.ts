@@ -13,5 +13,5 @@ export class SignUpInput extends PickType(SignInInput, [
   nickName: string
 
   @Field(() => String, { description: '프로필 이미지 url' })
-  photoUrl: string
+  profileImageUrl: string
 }

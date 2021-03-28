@@ -27,7 +27,7 @@ export class User {
 
   @Prop({ required: false })
   @Field(() => String, { description: '프로필 이미지 url' })
-  photoUrl: string
+  profileImageUrl: string
 
   @Prop({ required: true })
   @Field(() => Provider, { description: 'provider' })
