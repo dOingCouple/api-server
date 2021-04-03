@@ -9,6 +9,7 @@ import { Provider } from '~/common/constants'
 import { SignUpInput } from '~/auth/dto/sign-up.input'
 import { PaginationArgs } from '~/common/dto/page-pagination.args'
 import { paginate } from '~/common/utils/pagination'
+import { PaginatedUser } from './dto/paginated-user.out'
 
 @Injectable()
 export class UserService {
@@ -39,7 +40,7 @@ export class UserService {
     return this.userModel.findOne({ email, provider }).exec()
   }
 
-  findAll(args: PaginationArgs): Promise<User[]> {
+  findAll(args: PaginationArgs): Promise<PaginatedUser> {
     return paginate(this.userModel, args)
   }
 
