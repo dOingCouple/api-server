@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { v4 as uuid } from 'uuid'
-import { Model } from 'mongoose'
+import { Model, Types } from 'mongoose'
 import { User, UserDocument } from './schemas/user.schema'
 import { from } from 'rxjs'
 import {} from 'rxjs/operators'
 import { Provider } from '~/common/constants'
 import { SignUpInput } from '~/auth/dto/sign-up.input'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
+import { paginate } from '~/common/utils/pagination'
 
 @Injectable()
 export class UserService {
@@ -37,8 +39,8 @@ export class UserService {
     return this.userModel.findOne({ email, provider }).exec()
   }
 
-  findAll(): Promise<User[]> {
-    return this.userModel.find().exec()
+  findAll(args: PaginationArgs): Promise<User[]> {
+    return paginate(this.userModel, args)
   }
 
   findOne(id: number) {

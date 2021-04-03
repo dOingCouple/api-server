@@ -84,7 +84,7 @@ type FileListOut {
 }
 
 type Query {
-  users: [User!]!
+  users(next: Int = 10, after: String, before: String): [User!]!
   user(id: Int!): User!
   courseList: [Course!]!
   course(id: Int!): Course!

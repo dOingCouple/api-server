@@ -2,8 +2,8 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql'
 import { UserService } from './user.service'
 import { User } from './schemas/user.schema'
 import { UseGuards } from '@nestjs/common'
-import { CurrentUser } from '~/auth/decorators/current.user'
 import { GqlAuthGuard } from '~/auth/guards/gql.guard'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -11,8 +11,8 @@ export class UserResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [User], { name: 'users' })
-  findAll(@CurrentUser() fff: any): Promise<User[]> {
-    return this.userService.findAll()
+  findAll(@Args() args: PaginationArgs): Promise<User[]> {
+    return this.userService.findAll(args)
   }
 
   @Query(() => User, { name: 'user' })

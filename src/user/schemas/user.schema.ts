@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, ObjectId } from 'mongoose'
 import { Provider, Role } from '~/common/constants'
 import { Device } from './user.device.schema'
 
@@ -9,6 +9,8 @@ export type UserDocument = User & Document
 @Schema()
 @ObjectType()
 export class User {
+  _id: ObjectId
+
   @Prop({ required: true, unique: true })
   @Field(() => String, { description: 'uuid' })
   uuid: string
