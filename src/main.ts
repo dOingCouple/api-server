@@ -11,6 +11,7 @@ import http from 'http'
 import https from 'https'
 import { AppModule } from './app.module'
 import { Environment } from './config/types/env.types'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const server = express()
@@ -20,6 +21,7 @@ async function bootstrap() {
   )
   const configService = app.get(ConfigService)
 
+  app.useGlobalPipes(new ValidationPipe())
   app.useStaticAssets(join(__dirname, '..', 'public'))
   app.setBaseViewsDir(join(__dirname, '..', 'views'))
   app.setViewEngine('hbs')
