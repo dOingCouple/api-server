@@ -5,7 +5,9 @@ import { User } from '~/user/schemas/user.schema'
 import { AuthService } from './auth.service'
 import { CurrentUser } from './decorators/current.user'
 import { Roles } from './decorators/roles.decorator'
-import { Me } from './dto/me.out'
+import { ExistNickNameInput } from './dto/exist-nick-name.input'
+import { ExistNickNameOutput } from './dto/exist-nick-name.output'
+import { Me } from './dto/me.output'
 import { SignInInput } from './dto/sign-in.input'
 import { SignInOutput } from './dto/sign-in.output'
 import { SignUpInput } from './dto/sign-up.input'
@@ -37,5 +39,14 @@ export class AuthResolver {
   })
   me(@CurrentUser() user: User): Promise<Me> {
     return Promise.resolve({ nickName: user.nickName, uuid: user.uuid })
+  }
+
+  @Query(() => ExistNickNameOutput, {
+    description: '닉네임 존재 여부 확인',
+  })
+  existNickName(
+    @Args('existNickNameInput') nickName: ExistNickNameInput
+  ): Promise<ExistNickNameOutput> {
+    return this.authService.existNickName(nickName)
   }
 }

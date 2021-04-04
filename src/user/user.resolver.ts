@@ -4,7 +4,7 @@ import { User } from './schemas/user.schema'
 import { UseGuards } from '@nestjs/common'
 import { GqlAuthGuard } from '~/auth/guards/gql.guard'
 import { PaginationArgs } from '~/common/dto/page-pagination.args'
-import { PaginatedUser } from './dto/paginated-user.out'
+import { PaginatedUser } from './dto/paginated-user.output'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -14,15 +14,5 @@ export class UserResolver {
   @Query(() => PaginatedUser, { name: 'users' })
   findAll(@Args() args: PaginationArgs): Promise<PaginatedUser> {
     return this.userService.findAll(args)
-  }
-
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.findOne(id)
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.remove(id)
   }
 }

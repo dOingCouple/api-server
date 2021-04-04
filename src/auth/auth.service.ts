@@ -12,11 +12,13 @@ import { createHash } from 'crypto'
 import { ErrorType } from '~/common/error.type'
 import { User } from '~/user/schemas/user.schema'
 import { UserService } from '~/user/user.service'
-import { Me } from './dto/me.out'
+import { Me } from './dto/me.output'
 import { SignInInput } from './dto/sign-in.input'
 import { SignInOutput } from './dto/sign-in.output'
 import { SignUpInput } from './dto/sign-up.input'
 import { RedisService } from 'nestjs-redis'
+import { ExistNickNameOutput } from './dto/exist-nick-name.output'
+import { ExistNickNameInput } from './dto/exist-nick-name.input'
 
 @Injectable()
 export class AuthService {
@@ -70,5 +72,11 @@ export class AuthService {
 
   getSession(uuid: string): Promise<string | undefined> {
     return this.redisService.getClient().get(this.getSessionKey(uuid))
+  }
+
+  existNickName(input: ExistNickNameInput): Promise<ExistNickNameOutput> {
+    return from(this.userService.existNickName(input.nickName))
+      .pipe(map((exist): ExistNickNameOutput => ({ exist })))
+      .toPromise()
   }
 }

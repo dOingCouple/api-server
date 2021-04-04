@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql'
-import { Paginated } from '~/common/dto/page-pagination.out'
+import { Paginated } from '~/common/dto/page-pagination.output'
 import { User } from '../schemas/user.schema'
 
 @ObjectType()

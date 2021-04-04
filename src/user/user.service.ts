@@ -4,12 +4,12 @@ import { v4 as uuid } from 'uuid'
 import { Model, Types } from 'mongoose'
 import { User, UserDocument } from './schemas/user.schema'
 import { from } from 'rxjs'
-import {} from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 import { Provider } from '~/common/constants'
 import { SignUpInput } from '~/auth/dto/sign-up.input'
 import { PaginationArgs } from '~/common/dto/page-pagination.args'
 import { paginate } from '~/common/utils/pagination'
-import { PaginatedUser } from './dto/paginated-user.out'
+import { PaginatedUser } from './dto/paginated-user.output'
 
 @Injectable()
 export class UserService {
@@ -50,5 +50,9 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`
+  }
+
+  existNickName(nickName: string): Promise<boolean> {
+    return this.userModel.exists({ nickName })
   }
 }

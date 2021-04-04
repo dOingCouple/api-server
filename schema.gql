@@ -78,6 +78,11 @@ type Course {
   updatedAt: DateTime!
 }
 
+type ExistNickNameOutput {
+  """닉네임 존재 여부"""
+  exist: Boolean!
+}
+
 type Me {
   uuid: String!
 
@@ -97,17 +102,23 @@ type FileListOut {
 
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
-  user(id: Int!): User!
   courseList: [Course!]!
   course(id: Int!): Course!
 
   """자기 정보 가져오기"""
   me: Me!
+
+  """닉네임 존재 여부 확인"""
+  existNickName(existNickNameInput: ExistNickNameInput!): ExistNickNameOutput!
   findObject: FileListOut!
 }
 
+input ExistNickNameInput {
+  """닉네임"""
+  nickName: String!
+}
+
 type Mutation {
-  removeUser(id: Int!): User!
   createCourse(createCourseInput: CreateCourseInput!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!): Course!
   removeCourse(id: Int!): Course!
