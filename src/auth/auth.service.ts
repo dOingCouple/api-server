@@ -19,6 +19,8 @@ import { SignUpInput } from './dto/sign-up.input'
 import { RedisService } from 'nestjs-redis'
 import { ExistNickNameOutput } from './dto/exist-nick-name.output'
 import { ExistNickNameInput } from './dto/exist-nick-name.input'
+import { OtpOutput } from './dto/otp.output'
+import { createOtp } from '~/common/utils/random'
 
 @Injectable()
 export class AuthService {
@@ -78,5 +80,28 @@ export class AuthService {
     return from(this.userService.existNickName(input.nickName))
       .pipe(map((exist): ExistNickNameOutput => ({ exist })))
       .toPromise()
+  }
+
+  createOtp(): Promise<OtpOutput> {
+    return of(createOtp())
+      .pipe(
+        tap((otp) => {
+          this.redisService.getClient().set(this.getOtpKey(otp), otp, 'EX', 30)
+        }),
+        map((otp): OtpOutput => ({ value: otp }))
+      )
+      .toPromise()
+  }
+
+  getOtpKey(otp: string): string {
+    return `OTP:${otp}`
+  }
+
+  existOtp(otp: string): Promise<string | undefined> {
+    return this.redisService.getClient().get(this.getOtpKey(otp))
+  }
+
+  removeOtp(otp: string) {
+    return this.redisService.getClient().del(this.getOtpKey(otp))
   }
 }

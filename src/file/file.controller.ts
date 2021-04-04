@@ -7,16 +7,14 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { from } from 'rxjs'
-import { RestCurrentUser } from '~/auth/decorators/current.user'
-import { RestGuard } from '~/auth/guards/rest.guard'
-import { User } from '~/user/schemas/user.schema'
+import { OtpGuard } from '~/auth/guards/otp.guard'
 import { FileService } from './file.service'
 
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
-  @UseGuards(RestGuard)
+  @UseGuards(OtpGuard)
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -26,10 +24,7 @@ export class FileController {
       },
     })
   )
-  upload(
-    @RestCurrentUser() user: User,
-    @UploadedFile() file: Express.Multer.File
-  ) {
-    return from(this.fileService.uploadObject(file, user.uuid)).toPromise()
+  upload(@UploadedFile() file: Express.Multer.File) {
+    return from(this.fileService.uploadObject(file)).toPromise()
   }
 }

@@ -90,6 +90,11 @@ type Me {
   nickName: String!
 }
 
+type OtpOutput {
+  """일회용 비밀번호"""
+  value: String!
+}
+
 type SignInOutput {
   """jwt token"""
   accessToken: String!
@@ -110,6 +115,9 @@ type Query {
 
   """닉네임 존재 여부 확인"""
   existNickName(existNickNameInput: ExistNickNameInput!): ExistNickNameOutput!
+
+  """일회용 비밀번호"""
+  otp: OtpOutput!
   findObject: FileListOut!
 }
 

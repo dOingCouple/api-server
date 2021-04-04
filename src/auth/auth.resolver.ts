@@ -8,6 +8,7 @@ import { Roles } from './decorators/roles.decorator'
 import { ExistNickNameInput } from './dto/exist-nick-name.input'
 import { ExistNickNameOutput } from './dto/exist-nick-name.output'
 import { Me } from './dto/me.output'
+import { OtpOutput } from './dto/otp.output'
 import { SignInInput } from './dto/sign-in.input'
 import { SignInOutput } from './dto/sign-in.output'
 import { SignUpInput } from './dto/sign-up.input'
@@ -48,5 +49,12 @@ export class AuthResolver {
     @Args('existNickNameInput') nickName: ExistNickNameInput
   ): Promise<ExistNickNameOutput> {
     return this.authService.existNickName(nickName)
+  }
+
+  @Query(() => OtpOutput, {
+    description: '일회용 비밀번호',
+  })
+  otp(): Promise<OtpOutput> {
+    return this.authService.createOtp()
   }
 }

@@ -11,6 +11,7 @@ import {
 } from 'oci-common'
 import { from, of, throwError } from 'rxjs'
 import { flatMap, map } from 'rxjs/internal/operators'
+import { randomString } from '~/common/utils/random'
 import { OracleObjectStorage } from '~/config/types/env.types'
 import { FileListOut } from './dto/file-list.out'
 
@@ -55,7 +56,7 @@ export class FileService {
       .toPromise()
   }
 
-  uploadObject(file: Express.Multer.File, uuid: string) {
+  uploadObject(file: Express.Multer.File) {
     const headers = new Headers()
     headers.append('Content-Type', file.mimetype)
     headers.append('Content-Length', String(file.buffer.length))
@@ -66,7 +67,9 @@ export class FileService {
     )
 
     const httpRequest: HttpRequest = {
-      uri: `${this.properties.baseUrl}/n/${this.properties.namespace}/b/${this.properties.bucketName}/o/${uuid}/profile${extensionName}`,
+      uri: `${this.properties.baseUrl}/n/${this.properties.namespace}/b/${
+        this.properties.bucketName
+      }/o/profile/${randomString()}${extensionName}`,
       headers,
       method: 'PUT',
     }
