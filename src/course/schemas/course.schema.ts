@@ -12,6 +12,10 @@ export type CourseDocument = Course & Document
 @ObjectType()
 export class Course extends BasePost {
   @Prop({ required: true })
+  @Field(() => String, { description: '제목' })
+  title: string
+
+  @Prop({ required: true })
   @Field(() => [String], { description: '커버 이미지 URL 리스트' })
   coverUrls: string[]
 

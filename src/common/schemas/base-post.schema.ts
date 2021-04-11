@@ -11,10 +11,6 @@ export class BasePost {
   @Field(() => PostType, { description: '게시글 타입' })
   postType: PostType
 
-  @Prop({ required: true })
-  @Field(() => String, { description: '제목' })
-  title: string
-
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   @Field(() => User, { description: '등록자' })
   registerUser: User

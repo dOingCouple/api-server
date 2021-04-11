@@ -15,6 +15,7 @@ import { Environment } from './config/types/env.types'
 import { FileModule } from './file/file.module'
 import { MapController } from './map/map.controller'
 import { LikeModule } from './like/like.module'
+import { CommunityModule } from './community/community.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { LikeModule } from './like/like.module'
     AuthModule,
     FileModule,
     LikeModule,
+    CommunityModule,
   ],
   controllers: [AppController, MapController],
   providers: [AppService],

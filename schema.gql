@@ -65,9 +65,6 @@ type Course {
   """게시글 타입"""
   postType: PostType!
 
-  """제목"""
-  title: String!
-
   """등록자"""
   registerUser: User!
 
@@ -76,6 +73,9 @@ type Course {
 
   """수정날짜"""
   updatedAt: DateTime!
+
+  """제목"""
+  title: String!
 
   """커버 이미지 URL 리스트"""
   coverUrls: [String!]!
@@ -128,6 +128,35 @@ type Like {
   exampleField: Int!
 }
 
+type Community {
+  """게시글 타입"""
+  postType: PostType!
+
+  """등록자"""
+  registerUser: User!
+
+  """등록날짜"""
+  createdAt: DateTime!
+
+  """수정날짜"""
+  updatedAt: DateTime!
+
+  """게시글 내용"""
+  content: String!
+
+  """게시글 타입"""
+  communityType: CommunityType!
+
+  """게시글 이미지 URL 리스트"""
+  imageUrls: [String!]
+}
+
+"""커뮤니티 게시판 타입"""
+enum CommunityType {
+  FREE
+  WORRY
+}
+
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courseList: [Course!]!
@@ -143,6 +172,7 @@ type Query {
   otp: OtpOutput!
   findObject: FileListOut!
   like(id: Int!): Like!
+  community(id: Int!): Community!
 }
 
 input ExistNickNameInput {
@@ -163,6 +193,7 @@ type Mutation {
   createLike(createLikeInput: CreateLikeInput!): Like!
   updateLike(updateLikeInput: UpdateLikeInput!): Like!
   removeLike(id: Int!): Like!
+  createCommunity(createCommunityInput: CreateCommunityInput!): Community!
 }
 
 input CreateCourseInput {
@@ -248,6 +279,17 @@ input UpdateLikeInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input CreateCommunityInput {
+  """게시글 내용"""
+  content: String!
+
+  """게시글 타입"""
+  communityType: CommunityType!
+
+  """게시글 이미지 URL 리스트"""
+  imageUrls: [String!] = []
 }
 
 type Subscription {

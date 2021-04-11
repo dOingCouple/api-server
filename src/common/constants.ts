@@ -51,3 +51,13 @@ registerEnumType(LikeType, {
   name: 'LikeType',
   description: 'Like Type..',
 })
+
+export enum CommunityType {
+  FREE = 1,
+  WORRY = 2,
+}
+
+registerEnumType(CommunityType, {
+  name: 'CommunityType',
+  description: '커뮤니티 게시판 타입',
+})
