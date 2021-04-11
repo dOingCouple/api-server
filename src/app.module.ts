@@ -15,7 +15,8 @@ import { Environment } from './config/types/env.types'
 import { FileModule } from './file/file.module'
 import { MapController } from './map/map.controller'
 import { LikeModule } from './like/like.module'
-import { CommunityModule } from './community/community.module';
+import { CommunityModule } from './community/community.module'
+import { VoidScalar } from './common/scalars/void.scalar'
 
 @Module({
   imports: [
@@ -79,6 +80,6 @@ import { CommunityModule } from './community/community.module';
     CommunityModule,
   ],
   controllers: [AppController, MapController],
-  providers: [AppService],
+  providers: [AppService, VoidScalar],
 })
 export class AppModule {}

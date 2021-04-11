@@ -2,6 +2,7 @@ import { Model, Types, Document } from 'mongoose'
 import { from } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import { PaginationArgs } from '../dto/page-pagination.args'
+import { parsePaginateObjectId } from './string'
 
 export function paginate<T extends Document, R>(
   model: Model<T>,
@@ -16,9 +17,7 @@ export function paginate<T extends Document, R>(
     aggregates.push({
       $match: {
         _id: {
-          $lt: new Types.ObjectId(
-            Buffer.from(args.after, 'base64').toString('utf8')
-          ),
+          $lt: parsePaginateObjectId(args.after),
         },
       },
     })
@@ -28,9 +27,7 @@ export function paginate<T extends Document, R>(
     aggregates.push({
       $match: {
         _id: {
-          $gt: new Types.ObjectId(
-            Buffer.from(args.before, 'base64').toString('utf8')
-          ),
+          $gt: parsePaginateObjectId(args.before),
         },
       },
     })

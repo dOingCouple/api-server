@@ -20,9 +20,10 @@ export class CommunityResolver {
     return this.communityService.create(user, createCommunityInput)
   }
 
-  @Query(() => [Community], { name: 'community' })
-  findAll() {
-    return this.communityService.findAll()
+  @Query(() => [Community], { name: 'communities' })
+  async findAll() {
+    const res = await this.communityService.findAll()
+    return res
   }
 
   @Query(() => Community, { name: 'community' })

@@ -33,14 +33,13 @@ export class Community extends BasePost {
     user: User,
     createCommunity: CreateCommunityInput
   ): Community {
-    const obj = {
+    return {
       ...createCommunity,
       postType: PostType.COMMUNITY,
       registerUser: user,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }
-    return obj
+    } as Community
   }
 }
 

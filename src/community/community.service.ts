@@ -23,7 +23,7 @@ export class CommunityService {
   }
 
   findAll() {
-    return `This action returns all community`
+    return this.communityModel.find().populate('likes')
   }
 
   findOne(id: number) {

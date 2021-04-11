@@ -61,9 +61,30 @@ type PaginatedUser {
   pageInfo: UserPageInfo
 }
 
+type Like {
+  """Like Type"""
+  likeType: LikeType!
+
+  """등록자"""
+  registerUser: User!
+
+  """등록날짜"""
+  createdAt: DateTime!
+}
+
+"""Like Type.."""
+enum LikeType {
+  COURSE
+  COMMUNITY
+  COMMENT
+}
+
 type Course {
   """게시글 타입"""
   postType: PostType!
+
+  """like 리스트"""
+  likes: [Like!]!
 
   """등록자"""
   registerUser: User!
@@ -123,14 +144,12 @@ type FileListOut {
   content: String!
 }
 
-type Like {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Community {
   """게시글 타입"""
   postType: PostType!
+
+  """like 리스트"""
+  likes: [Like!]!
 
   """등록자"""
   registerUser: User!
@@ -172,6 +191,7 @@ type Query {
   otp: OtpOutput!
   findObject: FileListOut!
   like(id: Int!): Like!
+  communities: [Community!]!
   community(id: Int!): Community!
 }
 
@@ -190,8 +210,7 @@ type Mutation {
 
   """회원가입"""
   signUp(signUpInput: SignUpInput!): Me!
-  createLike(createLikeInput: CreateLikeInput!): Like!
-  updateLike(updateLikeInput: UpdateLikeInput!): Like!
+  createLike(createLikeInput: CreateLikeInput!): Void
   removeLike(id: Int!): Like!
   createCommunity(createCommunityInput: CreateCommunityInput!): Community!
 }
@@ -270,15 +289,15 @@ input SignUpInput {
   profileImageUrl: String!
 }
 
-input CreateLikeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
+"""void scalar type"""
+scalar Void
 
-input UpdateLikeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CreateLikeInput {
+  """Like Type"""
+  likeType: LikeType!
+
+  """부모 ID"""
+  parentId: String!
 }
 
 input CreateCommunityInput {
