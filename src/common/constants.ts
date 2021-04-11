@@ -30,3 +30,24 @@ registerEnumType(OS, {
   name: 'OS',
   description: '운영체제',
 })
+
+export enum PostType {
+  COURSE = 1,
+  COMMUNITY = 2,
+}
+
+registerEnumType(PostType, {
+  name: 'PostType',
+  description: '게시글 타입..',
+})
+
+export enum LikeType {
+  COURSE = 1,
+  COMMUNITY = 2,
+  COMMENT = 3,
+}
+
+registerEnumType(LikeType, {
+  name: 'LikeType',
+  description: 'Like Type..',
+})

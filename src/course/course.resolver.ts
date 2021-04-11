@@ -10,8 +10,11 @@ import { CourseService } from './course.service'
 import { Course } from './schemas/course.schema'
 import { CreateCourseInput } from './dto/create-course.input'
 import { UpdateCourseInput } from './dto/update-course.input'
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { HttpException, UseGuards } from '@nestjs/common'
 import { PubSub } from 'graphql-subscriptions'
+import { CurrentUser } from '~/auth/decorators/current.user'
+import { User } from '~/user/schemas/user.schema'
+import { GqlAuthGuard } from '~/auth/guards/gql.guard'
 
 const pubsub = new PubSub()
 
@@ -19,11 +22,13 @@ const pubsub = new PubSub()
 export class CourseResolver {
   constructor(private readonly courseService: CourseService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Course)
   createCourse(
-    @Args('createCourseInput') createCourseInput: CreateCourseInput
+    @Args('createCourseInput') createCourseInput: CreateCourseInput,
+    @CurrentUser() user: User
   ) {
-    return this.courseService.create(null, createCourseInput)
+    return this.courseService.create(user, createCourseInput)
   }
 
   @Query(() => [Course], { name: 'courseList' })

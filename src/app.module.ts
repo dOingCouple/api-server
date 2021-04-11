@@ -13,6 +13,8 @@ import { GraphQLError } from 'graphql'
 import { RedisModule } from 'nestjs-redis/dist/redis.module'
 import { Environment } from './config/types/env.types'
 import { FileModule } from './file/file.module'
+import { MapController } from './map/map.controller'
+import { LikeModule } from './like/like.module'
 
 @Module({
   imports: [
@@ -72,8 +74,9 @@ import { FileModule } from './file/file.module'
     CourseModule,
     AuthModule,
     FileModule,
+    LikeModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, MapController],
   providers: [AppService],
 })
 export class AppModule {}

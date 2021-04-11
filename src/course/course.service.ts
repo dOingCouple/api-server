@@ -13,10 +13,7 @@ export class CourseService {
   ) {}
 
   create(user: User, createCourseInput: CreateCourseInput): Promise<Course> {
-    return this.courseModel.create({
-      ...createCourseInput,
-      registerUser: user,
-    })
+    return this.courseModel.create(Course.createCourse(user, createCourseInput))
   }
 
   findAll(): Promise<Course[]> {

@@ -62,11 +62,11 @@ type PaginatedUser {
 }
 
 type Course {
+  """게시글 타입"""
+  postType: PostType!
+
   """제목"""
   title: String!
-
-  """내용"""
-  content: String!
 
   """등록자"""
   registerUser: User!
@@ -76,6 +76,24 @@ type Course {
 
   """수정날짜"""
   updatedAt: DateTime!
+
+  """커버 이미지 URL 리스트"""
+  coverUrls: [String!]!
+
+  """시작 날짜"""
+  startedAt: DateTime!
+
+  """소요 시간(분)"""
+  takeMinutes: String!
+
+  """소요 비용"""
+  takeCharge: String!
+}
+
+"""게시글 타입.."""
+enum PostType {
+  COURSE
+  COMMUNITY
 }
 
 type ExistNickNameOutput {
@@ -105,6 +123,11 @@ type FileListOut {
   content: String!
 }
 
+type Like {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courseList: [Course!]!
@@ -119,6 +142,7 @@ type Query {
   """일회용 비밀번호"""
   otp: OtpOutput!
   findObject: FileListOut!
+  like(id: Int!): Like!
 }
 
 input ExistNickNameInput {
@@ -136,22 +160,43 @@ type Mutation {
 
   """회원가입"""
   signUp(signUpInput: SignUpInput!): Me!
+  createLike(createLikeInput: CreateLikeInput!): Like!
+  updateLike(updateLikeInput: UpdateLikeInput!): Like!
+  removeLike(id: Int!): Like!
 }
 
 input CreateCourseInput {
   """제목"""
   title: String!
 
-  """내용"""
-  content: String!
+  """커버 이미지 URL 리스트"""
+  coverUrls: [String!] = []
+
+  """시작 날짜"""
+  startedAt: DateTime!
+
+  """소요 시간(분)"""
+  takeMinutes: Int!
+
+  """소요 비용"""
+  takeCharge: Int!
 }
 
 input UpdateCourseInput {
   """제목"""
   title: String
 
-  """내용"""
-  content: String
+  """커버 이미지 URL 리스트"""
+  coverUrls: [String!] = []
+
+  """시작 날짜"""
+  startedAt: DateTime
+
+  """소요 시간(분)"""
+  takeMinutes: Int
+
+  """소요 비용"""
+  takeCharge: Int
   id: Int!
 }
 
@@ -192,6 +237,17 @@ input SignUpInput {
 
   """프로필 이미지 url"""
   profileImageUrl: String!
+}
+
+input CreateLikeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateLikeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 type Subscription {
