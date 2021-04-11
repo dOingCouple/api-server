@@ -80,6 +80,6 @@ import { VoidScalar } from './common/scalars/void.scalar'
     CommunityModule,
   ],
   controllers: [AppController, MapController],
-  providers: [AppService, VoidScalar],
+  providers: [AppService],
 })
 export class AppModule {}

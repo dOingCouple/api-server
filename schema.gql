@@ -63,6 +63,9 @@ type PaginatedUser {
 
 type Like {
   """Like Type"""
+  _id: String!
+
+  """Like Type"""
   likeType: LikeType!
 
   """등록자"""
@@ -190,7 +193,6 @@ type Query {
   """일회용 비밀번호"""
   otp: OtpOutput!
   findObject: FileListOut!
-  like(id: Int!): Like!
   communities: [Community!]!
   community(id: Int!): Community!
 }
@@ -210,8 +212,8 @@ type Mutation {
 
   """회원가입"""
   signUp(signUpInput: SignUpInput!): Me!
-  createLike(createLikeInput: CreateLikeInput!): Void
-  removeLike(id: Int!): Like!
+  createLike(createLikeInput: CreateLikeInput!): Boolean!
+  removeLike(id: String!): Boolean!
   createCommunity(createCommunityInput: CreateCommunityInput!): Community!
 }
 
@@ -288,9 +290,6 @@ input SignUpInput {
   """프로필 이미지 url"""
   profileImageUrl: String!
 }
-
-"""void scalar type"""
-scalar Void
 
 input CreateLikeInput {
   """Like Type"""

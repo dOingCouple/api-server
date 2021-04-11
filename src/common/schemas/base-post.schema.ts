@@ -14,9 +14,9 @@ export class BasePost {
   @Field(() => PostType, { description: '게시글 타입' })
   postType: PostType
 
-  @Prop({ type: [Types.ObjectId], ref: Like.name, default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Like.name }] })
   @Field(() => [Like], { description: 'like 리스트' })
-  likes: Like[] = []
+  likes: Like[]
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   @Field(() => User, { description: '등록자' })

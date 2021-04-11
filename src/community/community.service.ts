@@ -23,7 +23,15 @@ export class CommunityService {
   }
 
   findAll() {
-    return this.communityModel.find().populate('likes')
+    return this.communityModel
+      .find()
+      .populate({
+        path: 'likes',
+        populate: {
+          path: 'registerUser',
+        },
+      })
+      .populate('registerUser')
   }
 
   findOne(id: number) {

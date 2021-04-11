@@ -12,6 +12,7 @@ export type LikeDocument = Like & Document
 @Schema()
 @ObjectType()
 export class Like {
+  @Field(() => String, { description: 'Like Type' })
   _id: Types.ObjectId
 
   @Prop({ required: true })
@@ -23,7 +24,7 @@ export class Like {
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   @Field(() => User, { description: '등록자' })
-  registerUser: User
+  registerUser: User | Types.ObjectId
 
   @Prop({ required: false })
   @Field(() => Date, { description: '등록날짜', defaultValue: new Date() })
