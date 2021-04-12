@@ -6,12 +6,29 @@ import {
 } from '@nestjs/platform-express'
 import { join } from 'path'
 import { readFileSync } from 'fs'
-import express from 'express'
+import express, { Express } from 'express'
 import http from 'http'
 import https from 'https'
 import { AppModule } from './app.module'
 import { Environment } from './config/types/env.types'
 import { ValidationPipe } from '@nestjs/common'
+
+function middlewareHttpsRedirect(
+  server: Express,
+  configService: ConfigService
+) {
+  server.use((req, res, next) => {
+    if (!req.secure) {
+      res.redirect(
+        `https://${req.hostname}:${configService.get<number>(
+          'server.https.port'
+        )}${req.url}`
+      )
+      return
+    }
+    next()
+  })
+}
 
 async function bootstrap() {
   const server = express()
@@ -25,6 +42,8 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'))
   app.setBaseViewsDir(join(__dirname, '..', 'views'))
   app.setViewEngine('hbs')
+
+  middlewareHttpsRedirect(server, configService)
 
   await app.init()
 
