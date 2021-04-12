@@ -9,7 +9,8 @@ import { CreateLikeInput } from '../dto/create-like.input'
 
 export type LikeDocument = Like & Document
 
-@Schema()
+export const COLLECTION_NAME = 'likes'
+@Schema({ collection: COLLECTION_NAME })
 @ObjectType()
 export class Like {
   @Field(() => String, { description: 'Like Type' })
@@ -22,7 +23,7 @@ export class Like {
   @Prop({ type: Types.ObjectId })
   parentId: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   @Field(() => User, { description: '등록자' })
   registerUser: User | Types.ObjectId
 

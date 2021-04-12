@@ -8,7 +8,9 @@ import { PostType } from '~/common/constants'
 
 export type CourseDocument = Course & Document
 
-@Schema()
+export const COLLECTION_NAME = 'courses'
+
+@Schema({ collection: COLLECTION_NAME })
 @ObjectType()
 export class Course extends BasePost {
   @Prop({ required: true })

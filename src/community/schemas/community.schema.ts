@@ -9,7 +9,8 @@ import { CreateCommunityInput } from '../dto/create-community.input'
 
 export type CommunityDocument = Community & Document
 
-@Schema()
+export const COLLECTION_NAME = 'communities'
+@Schema({ collection: COLLECTION_NAME })
 @ObjectType()
 export class Community extends BasePost {
   @Prop({ required: true })

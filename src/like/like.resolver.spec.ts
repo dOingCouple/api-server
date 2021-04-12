@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { getModelToken } from '@nestjs/mongoose'
+import { getConnectionToken, getModelToken } from '@nestjs/mongoose'
 import { LikeResolver } from './like.resolver'
 import { LikeService } from './like.service'
 
@@ -18,6 +18,10 @@ describe('LikeResolver', () => {
         {
           provide: getModelToken('Like'),
           useValue: new MockUser(),
+        },
+        {
+          provide: getConnectionToken('Database'),
+          useValue: {},
         },
       ],
     }).compile()

@@ -3,12 +3,10 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose'
 import { Connection, Model } from 'mongoose'
 import { forkJoin, from, of, throwError } from 'rxjs'
 import { flatMap } from 'rxjs/internal/operators'
-import { map, switchMap, tap } from 'rxjs/operators'
-import { LikeType } from '~/common/constants'
+import { map, switchMap } from 'rxjs/operators'
 import { ErrorType } from '~/common/error.type'
 import { BasePost } from '~/common/schemas/base-post.schema'
 import { findModelName } from '~/common/utils/like.enum'
-import { findOne, updateOne } from '~/common/utils/mongo'
 import { parseObjectId } from '~/common/utils/string'
 import { User } from '~/user/schemas/user.schema'
 import { CreateLikeInput } from './dto/create-like.input'
@@ -129,7 +127,10 @@ export class LikeService {
           ),
         ])
       ),
-      map(() => true)
+      map(
+        ([resRemove, resPull]) =>
+          resRemove.deletedCount === 1 && resPull.result.ok === 1
+      )
     )
   }
 }

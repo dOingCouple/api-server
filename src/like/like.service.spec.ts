@@ -1,5 +1,6 @@
-import { getModelToken } from '@nestjs/mongoose'
+import { getConnectionToken, getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Connection } from 'mongoose'
 import { LikeService } from './like.service'
 
 describe('LikeService', () => {
@@ -9,13 +10,16 @@ describe('LikeService', () => {
     class MockUser {
       constructor(public data?: any) {}
     }
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LikeService,
         {
           provide: getModelToken('Like'),
           useValue: new MockUser(),
+        },
+        {
+          provide: getConnectionToken('Database'),
+          useValue: {},
         },
       ],
     }).compile()
