@@ -41,13 +41,13 @@ registerEnumType(PostType, {
   description: '게시글 타입..',
 })
 
-export enum LikeType {
+export enum ParentType {
   COURSE = 1,
   COMMUNITY = 2,
   COMMENT = 3,
 }
 
-registerEnumType(LikeType, {
+registerEnumType(ParentType, {
   name: 'LikeType',
   description: 'Like Type..',
 })

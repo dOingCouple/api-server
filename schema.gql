@@ -65,8 +65,8 @@ type Like {
   """Like Type"""
   _id: String!
 
-  """Like Type"""
-  likeType: LikeType!
+  """Parent Type"""
+  parentType: LikeType!
 
   """등록자"""
   registerUser: User!
@@ -179,6 +179,11 @@ enum CommunityType {
   WORRY
 }
 
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courseList: [Course!]!
@@ -195,6 +200,7 @@ type Query {
   findObject: FileListOut!
   communities: [Community!]!
   community(id: Int!): Community!
+  comment(id: Int!): Comment!
 }
 
 input ExistNickNameInput {
@@ -215,6 +221,9 @@ type Mutation {
   createLike(createLikeInput: CreateLikeInput!): Boolean!
   removeLike(id: String!): Boolean!
   createCommunity(createCommunityInput: CreateCommunityInput!): Community!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
 }
 
 input CreateCourseInput {
@@ -292,8 +301,8 @@ input SignUpInput {
 }
 
 input CreateLikeInput {
-  """Like Type"""
-  likeType: LikeType!
+  """Parent Type"""
+  parentType: LikeType!
 
   """부모 ID"""
   parentId: String!
@@ -308,6 +317,17 @@ input CreateCommunityInput {
 
   """게시글 이미지 URL 리스트"""
   imageUrls: [String!] = []
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 type Subscription {

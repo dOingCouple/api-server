@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types, Document } from 'mongoose'
-import { LikeType } from '~/common/constants'
+import { ParentType } from '~/common/constants'
 import { BasePost } from '~/common/schemas/base-post.schema'
 import { parseObjectId } from '~/common/utils/string'
 import { User } from '~/user/schemas/user.schema'
@@ -17,8 +17,8 @@ export class Like {
   _id: Types.ObjectId
 
   @Prop({ required: true })
-  @Field(() => LikeType, { description: 'Like Type' })
-  likeType: LikeType
+  @Field(() => ParentType, { description: 'Parent Type' })
+  parentType: ParentType
 
   @Prop({ type: Types.ObjectId })
   parentId: Types.ObjectId
@@ -34,7 +34,7 @@ export class Like {
   public static createLike(user: User, createLike: CreateLikeInput): Like {
     return {
       parentId: parseObjectId(createLike.parentId),
-      likeType: createLike.likeType,
+      parentType: createLike.parentType,
       registerUser: user,
       createdAt: new Date(),
     } as Like

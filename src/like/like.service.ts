@@ -22,7 +22,7 @@ export class LikeService {
   async create(user: User, createLikeInput: CreateLikeInput) {
     return from(
       this.connection
-        .model(findModelName(createLikeInput.likeType))
+        .model(findModelName(createLikeInput.parentType))
         .findOne({
           _id: parseObjectId(createLikeInput.parentId),
         })
@@ -56,7 +56,7 @@ export class LikeService {
         ),
         flatMap((like) => {
           return this.connection
-            .model(findModelName(createLikeInput.likeType))
+            .model(findModelName(createLikeInput.parentType))
             .updateOne(
               {
                 _id: like.parentId,
@@ -82,55 +82,59 @@ export class LikeService {
     return `This action returns a #${id} like`
   }
 
-  remove(user: User, id: string) {
+  remove(user: User, id: string): Promise<boolean> {
     return from(
       this.likeModel.findById({
         _id: id,
       })
-    ).pipe(
-      switchMap((like) =>
-        !like
-          ? throwError(
-              new HttpException(
-                `like model is null, id: ${id}`,
-                ErrorType.NOT_FOUND_DATA
-              )
-            )
-          : of(like)
-      ),
-      switchMap((like) =>
-        like.registerUser === user._id
-          ? throwError(
-              new HttpException(
-                `like register user is no permission`,
-                ErrorType.NO_PERMISSION
-              )
-            )
-          : of(like)
-      ),
-      switchMap((like) =>
-        forkJoin([
-          this.likeModel
-            .deleteOne({
-              _id: id,
-            })
-            .exec(),
-          this.connection.collection(findModelName(like.likeType)).updateOne(
-            {
-              _id: like.parentId,
-            },
-            {
-              $pull: {
-                likes: like._id,
-              },
-            }
-          ),
-        ])
-      ),
-      map(
-        ([resRemove, resPull]) =>
-          resRemove.deletedCount === 1 && resPull.result.ok === 1
-      )
     )
+      .pipe(
+        switchMap((like) =>
+          !like
+            ? throwError(
+                new HttpException(
+                  `like model is null, id: ${id}`,
+                  ErrorType.NOT_FOUND_DATA
+                )
+              )
+            : of(like)
+        ),
+        switchMap((like) =>
+          like.registerUser === user._id
+            ? throwError(
+                new HttpException(
+                  `like register user is no permission`,
+                  ErrorType.NO_PERMISSION
+                )
+              )
+            : of(like)
+        ),
+        switchMap((like) =>
+          forkJoin([
+            this.likeModel
+              .deleteOne({
+                _id: id,
+              })
+              .exec(),
+            this.connection
+              .collection(findModelName(like.parentType))
+              .updateOne(
+                {
+                  _id: like.parentId,
+                },
+                {
+                  $pull: {
+                    likes: like._id,
+                  },
+                }
+              ),
+          ])
+        ),
+        map(
+          ([resRemove, resPull]) =>
+            resRemove.deletedCount === 1 && resPull.result.ok === 1
+        )
+      )
+      .toPromise()
   }
 }

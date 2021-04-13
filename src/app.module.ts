@@ -17,6 +17,7 @@ import { MapController } from './map/map.controller'
 import { LikeModule } from './like/like.module'
 import { CommunityModule } from './community/community.module'
 import { VoidScalar } from './common/scalars/void.scalar'
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { VoidScalar } from './common/scalars/void.scalar'
     FileModule,
     LikeModule,
     CommunityModule,
+    CommentModule,
   ],
   controllers: [AppController, MapController],
   providers: [AppService],
