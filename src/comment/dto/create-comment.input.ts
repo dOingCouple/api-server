@@ -1,7 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql'
+import { InputType } from '@nestjs/graphql'
+import { CreateBaseCommentInput } from './create-base-comment.input'
 
 @InputType()
-export class CreateCommentInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number
-}
+export class CreateCommentInput extends CreateBaseCommentInput {}

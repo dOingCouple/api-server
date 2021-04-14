@@ -7,6 +7,7 @@ import { map, switchMap } from 'rxjs/operators'
 import { ErrorType } from '~/common/error.type'
 import { BasePost } from '~/common/schemas/base-post.schema'
 import { findModelName } from '~/common/utils/like.enum'
+import { findOneBasePost } from '~/common/utils/mongo'
 import { parseObjectId } from '~/common/utils/string'
 import { User } from '~/user/schemas/user.schema'
 import { CreateLikeInput } from './dto/create-like.input'
@@ -20,27 +21,15 @@ export class LikeService {
   ) {}
 
   async create(user: User, createLikeInput: CreateLikeInput) {
-    return from(
-      this.connection
-        .model(findModelName(createLikeInput.parentType))
-        .findOne({
-          _id: parseObjectId(createLikeInput.parentId),
-        })
-        .populate({
-          path: 'likes',
-        })
+    return findOneBasePost(
+      this.connection,
+      createLikeInput.parentType,
+      createLikeInput.parentId,
+      {
+        path: 'likes',
+      }
     )
       .pipe(
-        switchMap((obj: any) =>
-          !obj
-            ? throwError(
-                new HttpException(
-                  { ...createLikeInput },
-                  ErrorType.NOT_FOUND_DATA
-                )
-              )
-            : of(obj)
-        ),
         switchMap((basePost: BasePost) =>
           basePost.likes.map((like) => like.registerUser).includes(user._id)
             ? throwError(
