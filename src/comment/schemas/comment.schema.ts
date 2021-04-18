@@ -39,7 +39,7 @@ export class Comment {
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: false })
   @Field(() => User, { description: '대상자', nullable: true })
-  targetUser?: User
+  targetUser?: User | Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   @Field(() => User, { description: '등록자' })
@@ -77,6 +77,7 @@ export class Comment {
       parentId: targetComment.parentId,
       parentType: targetComment.parentType,
       content: createReplyComment.content,
+      targetUser: targetComment.registerUser,
       registerUser: user,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -88,6 +89,10 @@ export class Comment {
   ): objectId is Types.ObjectId {
     return objectId instanceof Types.ObjectId
   }
+}
+
+export function isReplyComment(comment: Comment) {
+  return typeof comment.targetUser === 'object'
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment)

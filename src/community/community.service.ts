@@ -39,9 +39,14 @@ export class CommunityService {
           },
           {
             path: 'replyComments',
-            populate: {
-              path: 'registerUser',
-            },
+            populate: [
+              {
+                path: 'registerUser',
+              },
+              {
+                path: 'targetUser',
+              },
+            ],
           },
         ],
       })

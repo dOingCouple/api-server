@@ -2,16 +2,21 @@ import { HttpException, Injectable } from '@nestjs/common'
 import { InjectConnection, InjectModel } from '@nestjs/mongoose'
 import { Connection, Model, Types } from 'mongoose'
 import { from, of, throwError } from 'rxjs'
-import { flatMap, map, switchMap } from 'rxjs/internal/operators'
+import { filter, flatMap, map, switchMap, tap } from 'rxjs/internal/operators'
 import { ErrorType } from '~/common/error.type'
 import { notFoundData } from '~/common/operators'
 import { findModelName } from '~/common/utils/like.enum'
 import { findOneBasePost } from '~/common/utils/mongo'
+import { parseObjectId } from '~/common/utils/string'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCommentInput } from './dto/create-comment.input'
 import { CreateReplyCommentInput } from './dto/create-reply-comment.input'
 import { UpdateCommentInput } from './dto/update-comment.input'
-import { Comment, CommentDocument } from './schemas/comment.schema'
+import {
+  Comment,
+  CommentDocument,
+  isReplyComment,
+} from './schemas/comment.schema'
 
 @Injectable()
 export class CommentService {
@@ -59,6 +64,16 @@ export class CommentService {
       .pipe(
         notFoundData(
           `not found comment, commentId: ${createReplyCommentInput.commentId}`
+        ),
+        switchMap((targetComment: Comment) =>
+          isReplyComment(targetComment)
+            ? throwError(
+                new HttpException(
+                  `cannot append comment`,
+                  ErrorType.NOT_APPEND_COMMENT
+                )
+              )
+            : of(targetComment)
         ),
         switchMap((targetComment: Comment) =>
           from(
@@ -156,13 +171,52 @@ export class CommentService {
                   }
                 )
                 .exec()
-            : this.commentModel
-                .deleteOne({
-                  _id: commentId,
-                })
-                .exec()
+            : from(this.connection.startSession())
+                .pipe(
+                  switchMap((session) =>
+                    from(
+                      session.withTransaction(async () => {
+                        await this.commentModel.deleteOne({ _id: commentId })
+                        if (isReplyComment(comment)) {
+                          await this.commentModel.updateOne(
+                            {
+                              replyComments: comment._id,
+                            },
+                            {
+                              $pull: {
+                                replyComments: comment._id,
+                              },
+                            }
+                          )
+                        } else {
+                          await this.connection
+                            .model(findModelName(comment.parentType))
+                            .updateOne(
+                              {
+                                _id: parseObjectId(comment.parentId),
+                              },
+                              {
+                                $pull: {
+                                  comments: comment._id,
+                                },
+                              }
+                            )
+                        }
+                      })
+                    ).pipe(
+                      flatMap(() => session.commitTransaction()),
+                      tap(() => session.endSession())
+                    )
+                  )
+                )
+                .toPromise()
         ),
-        map((res) => res.ok === 1)
+        map((res) => {
+          if (res) {
+            return res.ok === 1
+          }
+          return true
+        })
       )
       .toPromise()
   }

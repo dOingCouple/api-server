@@ -7,4 +7,5 @@ export enum ErrorType {
   ALREADY_ADD_LIKE = 3001,
   NO_PERMISSION = 4001,
   UN_DEVELOPED = 5001,
+  NOT_APPEND_COMMENT = 5011,
 }
