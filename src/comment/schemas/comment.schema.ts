@@ -1,17 +1,19 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Length } from 'class-validator'
-import { Types, Document } from 'mongoose'
+import { Types, Document, ObjectId } from 'mongoose'
 import { ParentType } from '~/common/constants'
 import { Like } from '~/like/schemas/like.scheme'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCommentInput } from '../dto/create-comment.input'
+import { CreateReplyCommentInput } from '../dto/create-reply-comment.input'
 
 export type CommentDocument = Comment & Document
 
 @Schema()
 @ObjectType()
 export class Comment {
+  @Field(() => String, { description: '댓글 ID' })
   _id: Types.ObjectId
 
   @Prop()
@@ -33,7 +35,7 @@ export class Comment {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: Comment.name, default: [] }] })
   @Field(() => [Comment], { description: '코멘트 리스트', defaultValue: [] })
-  replyComments: Comment[] = []
+  replyComments: Comment[] | Types.ObjectId[] = []
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: false })
   @Field(() => User, { description: '대상자', nullable: true })
@@ -41,7 +43,10 @@ export class Comment {
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   @Field(() => User, { description: '등록자' })
-  registerUser: User
+  registerUser: User | Types.ObjectId
+
+  @Prop({ type: Boolean, required: false })
+  delete = false
 
   @Prop({ required: false })
   @Field(() => Date, { description: '등록날짜', defaultValue: new Date() })
@@ -61,6 +66,27 @@ export class Comment {
       createdAt: new Date(),
       updatedAt: new Date(),
     } as Comment
+  }
+
+  public static createReplyComment(
+    user: User,
+    targetComment: Comment,
+    createReplyComment: CreateReplyCommentInput
+  ): Comment {
+    return {
+      parentId: targetComment.parentId,
+      parentType: targetComment.parentType,
+      content: createReplyComment.content,
+      registerUser: user,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as Comment
+  }
+
+  public static isObjectIdInRegisterUser(
+    objectId: any
+  ): objectId is Types.ObjectId {
+    return objectId instanceof Types.ObjectId
   }
 }
 

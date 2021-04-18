@@ -6,4 +6,5 @@ export enum ErrorType {
   NOT_FOUND_DATA = 2002,
   ALREADY_ADD_LIKE = 3001,
   NO_PERMISSION = 4001,
+  UN_DEVELOPED = 5001,
 }

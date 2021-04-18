@@ -33,9 +33,17 @@ export class CommunityService {
       })
       .populate({
         path: 'comments',
-        populate: {
-          path: 'registerUser',
-        },
+        populate: [
+          {
+            path: 'registerUser',
+          },
+          {
+            path: 'replyComments',
+            populate: {
+              path: 'registerUser',
+            },
+          },
+        ],
       })
       .populate('registerUser')
   }

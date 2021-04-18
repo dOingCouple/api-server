@@ -23,12 +23,12 @@ export class CommentResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Comment, { description: '대댓글 작성' })
+  @Mutation(() => Boolean, { description: '대댓글 작성' })
   createReplyComment(
     @Args('createReplyCommentInput')
     createReplyCommentInput: CreateReplyCommentInput,
     @CurrentUser() user: User
-  ) {
+  ): Promise<boolean> {
     return this.commentService.createReply(user, createReplyCommentInput)
   }
 
@@ -38,24 +38,20 @@ export class CommentResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Comment)
+  @Mutation(() => Boolean, { description: '댓글 내용 수정' })
   updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
     @CurrentUser() user: User
-  ) {
-    return this.commentService.update(
-      user,
-      updateCommentInput.id,
-      updateCommentInput
-    )
+  ): Promise<boolean> {
+    return this.commentService.update(user, updateCommentInput)
   }
 
   @UseGuards(GqlAuthGuard)
-  @Mutation(() => Comment)
+  @Mutation(() => Boolean, { description: '댓글 내용 삭제' })
   removeComment(
-    @Args('id', { type: () => Int }) id: number,
+    @Args('commentId', { type: () => String }) commentId: string,
     @CurrentUser() user: User
   ) {
-    return this.commentService.remove(user, id)
+    return this.commentService.remove(user, commentId)
   }
 }

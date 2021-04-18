@@ -83,6 +83,9 @@ enum LikeType {
 }
 
 type Comment {
+  """댓글 ID"""
+  _id: String!
+
   """부모 ID"""
   parentId: String!
 
@@ -264,9 +267,13 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Boolean!
 
   """대댓글 작성"""
-  createReplyComment(createReplyCommentInput: CreateReplyCommentInput!): Comment!
-  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
+  createReplyComment(createReplyCommentInput: CreateReplyCommentInput!): Boolean!
+
+  """댓글 내용 수정"""
+  updateComment(updateCommentInput: UpdateCommentInput!): Boolean!
+
+  """댓글 내용 삭제"""
+  removeComment(commentId: String!): Boolean!
 }
 
 input CreateCourseInput {
@@ -374,12 +381,6 @@ input CreateCommentInput {
 }
 
 input CreateReplyCommentInput {
-  """부모 ID"""
-  parentId: String!
-
-  """부모 타입"""
-  parentType: LikeType!
-
   """댓글 내용"""
   content: String!
 
@@ -388,15 +389,10 @@ input CreateReplyCommentInput {
 }
 
 input UpdateCommentInput {
-  """부모 ID"""
-  parentId: String
+  commentId: String = "댓글 수정할 ID"
 
-  """부모 타입"""
-  parentType: LikeType
-
-  """댓글 내용"""
-  content: String
-  id: Int!
+  """댓글 수정 내용"""
+  content: String!
 }
 
 type Subscription {
