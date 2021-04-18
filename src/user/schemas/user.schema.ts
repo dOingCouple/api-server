@@ -1,8 +1,9 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
+import { SignUpInput } from '~/auth/dto/sign-up.input'
 import { Provider, Role } from '~/common/constants'
-import { Device } from './user.device.schema'
+import { v4 as uuid } from 'uuid'
 
 export type UserDocument = User & Document
 
@@ -46,6 +47,15 @@ export class User {
   @Prop({ required: false })
   @Field(() => Date, { description: '수정날짜', defaultValue: new Date() })
   updatedAt: Date
+
+  public static createUser(signUpInput: SignUpInput): User {
+    return {
+      uuid: uuid(),
+      ...signUpInput,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as User
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

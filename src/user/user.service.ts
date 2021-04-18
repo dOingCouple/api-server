@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { v4 as uuid } from 'uuid'
-import { Model, Types } from 'mongoose'
+import { Model } from 'mongoose'
 import { User, UserDocument } from './schemas/user.schema'
 import { from } from 'rxjs'
-import { map } from 'rxjs/operators'
 import { Provider } from '~/common/constants'
 import { SignUpInput } from '~/auth/dto/sign-up.input'
 import { PaginationArgs } from '~/common/dto/page-pagination.args'
@@ -16,12 +14,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   create(signUpInput: SignUpInput): Promise<User> {
-    return from(
-      this.userModel.create({
-        uuid: uuid(),
-        ...signUpInput,
-      })
-    )
+    return from(this.userModel.create(User.createUser(signUpInput)))
       .pipe()
       .toPromise()
   }
