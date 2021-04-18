@@ -18,6 +18,7 @@ import { LikeModule } from './like/like.module'
 import { CommunityModule } from './community/community.module'
 import { VoidScalar } from './common/scalars/void.scalar'
 import { CommentModule } from './comment/comment.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { CommentModule } from './comment/comment.module';
     LikeModule,
     CommunityModule,
     CommentModule,
+    TagModule,
   ],
   controllers: [AppController, MapController],
   providers: [AppService],

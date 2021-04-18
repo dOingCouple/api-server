@@ -135,6 +135,7 @@ export class CommentService {
               {
                 $set: {
                   content: updateCommentInput.content,
+                  updatedAt: new Date(),
                 },
               }
             )
@@ -167,6 +168,7 @@ export class CommentService {
                   {
                     $set: {
                       delete: true,
+                      updatedAt: new Date(),
                     },
                   }
                 )

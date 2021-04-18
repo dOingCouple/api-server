@@ -223,6 +223,14 @@ enum CommunityType {
   WORRY
 }
 
+type Tag {
+  """Tag ID"""
+  _id: String!
+
+  """Tag 이름"""
+  name: String!
+}
+
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courseList: [Course!]!
@@ -242,6 +250,7 @@ type Query {
 
   """댓글 조회"""
   comments(uuid: String!): [Comment!]!
+  tag: [Tag!]!
 }
 
 input ExistNickNameInput {
