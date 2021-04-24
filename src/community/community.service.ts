@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
+import { InjectConnection, InjectModel } from '@nestjs/mongoose'
+import { Connection, Model } from 'mongoose'
 import { from } from 'rxjs'
 import { flatMap } from 'rxjs/internal/operators'
 import { map, tap } from 'rxjs/operators'
@@ -15,7 +15,8 @@ export class CommunityService {
   constructor(
     @InjectModel(Community.name)
     private communityModel: Model<CommunityDocument>,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
+    @InjectConnection() private connection: Connection
   ) {}
 
   create(

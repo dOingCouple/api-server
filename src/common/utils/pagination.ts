@@ -6,7 +6,8 @@ import { parsePaginateObjectId } from './string'
 
 export function paginate<T extends Document, R>(
   model: Model<T>,
-  args: PaginationArgs
+  args: PaginationArgs,
+  querys?: any[]
 ) {
   const aggregates = []
   aggregates.push({
@@ -36,6 +37,14 @@ export function paginate<T extends Document, R>(
   aggregates.push({
     $limit: args.next + 1,
   })
+
+  aggregates.push({
+    $sort: {
+      _id: -1,
+    },
+  })
+
+  querys.forEach((query) => aggregates.push(query))
 
   return from(model.aggregate(aggregates))
     .pipe(

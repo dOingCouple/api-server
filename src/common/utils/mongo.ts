@@ -50,3 +50,7 @@ export function findOneBasePost(
     )
   )
 }
+
+export function getCollectionName(connection: Connection, modelName: string) {
+  return connection.model(modelName).collection.collectionName
+}

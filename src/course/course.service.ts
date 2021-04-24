@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
+import { InjectConnection, InjectModel } from '@nestjs/mongoose'
+import { Connection, Model } from 'mongoose'
 import { from } from 'rxjs'
 import { flatMap } from 'rxjs/internal/operators'
 import { map } from 'rxjs/operators'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
+import { getCollectionName } from '~/common/utils/mongo'
+import { paginate } from '~/common/utils/pagination'
+import { Tag } from '~/tag/schemas/tag.schema'
 import { TagService } from '~/tag/tag.service'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCourseInput } from './dto/create-course.input'
+import { PaginatedCourse } from './dto/paginated-course.output'
 import { UpdateCourseInput } from './dto/update-course.input'
 import { Course, CourseDocument } from './schemas/course.schema'
 
@@ -14,7 +19,8 @@ import { Course, CourseDocument } from './schemas/course.schema'
 export class CourseService {
   constructor(
     @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
+    @InjectConnection() private connection: Connection
   ) {}
 
   create(user: User, createCourseInput: CreateCourseInput): Promise<Course> {
@@ -25,8 +31,52 @@ export class CourseService {
       )
       .toPromise()
   }
-  findAll(): Promise<Course[]> {
-    return this.courseModel.find().sort({ createdAt: -1 }).exec()
+  findAll(args: PaginationArgs): Promise<PaginatedCourse> {
+    return paginate(this.courseModel, args, [
+      {
+        $lookup: {
+          from: getCollectionName(this.connection, User.name),
+          localField: 'registerUser',
+          foreignField: '_id',
+          as: 'registerUser',
+        },
+      },
+      {
+        $unwind: '$registerUser',
+      },
+      {
+        $lookup: {
+          from: getCollectionName(this.connection, Tag.name),
+          localField: 'tags',
+          foreignField: '_id',
+          as: 'tags',
+        },
+      },
+      {
+        $addFields: {
+          tags: '$tags.name',
+        },
+      },
+      {
+        $set: {
+          cntComment: {
+            $size: {
+              $ifNull: ['$comments', []],
+            },
+          },
+          cntLike: {
+            $size: {
+              $ifNull: ['$likes', []],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+    ])
   }
 
   findOne(id: number) {

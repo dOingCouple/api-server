@@ -61,14 +61,6 @@ type PaginatedUser {
   pageInfo: UserPageInfo
 }
 
-type Tag {
-  """Tag ID"""
-  _id: String!
-
-  """Tag 이름"""
-  name: String!
-}
-
 type Like {
   """Like Type"""
   _id: String!
@@ -122,6 +114,61 @@ type Comment {
   updatedAt: DateTime!
 }
 
+type Tag {
+  """Tag ID"""
+  _id: String!
+
+  """Tag 이름"""
+  name: String!
+}
+
+type Community {
+  """게시글 ID"""
+  _id: String!
+
+  """게시글 타입"""
+  postType: PostType!
+
+  """like 리스트"""
+  likes: [Like!]!
+
+  """댓글 리스트"""
+  comments: [Comment!]!
+
+  """태그 리스트"""
+  tags: [Tag!]!
+
+  """등록자"""
+  registerUser: User!
+
+  """등록날짜"""
+  createdAt: DateTime!
+
+  """수정날짜"""
+  updatedAt: DateTime!
+
+  """게시글 내용"""
+  content: String!
+
+  """게시글 타입"""
+  communityType: CommunityType!
+
+  """게시글 이미지 URL 리스트"""
+  imageUrls: [String!]
+}
+
+"""게시글 타입.."""
+enum PostType {
+  COURSE
+  COMMUNITY
+}
+
+"""커뮤니티 게시판 타입"""
+enum CommunityType {
+  FREE
+  WORRY
+}
+
 type Course {
   """게시글 ID"""
   _id: String!
@@ -163,10 +210,57 @@ type Course {
   takeCharge: String!
 }
 
-"""게시글 타입.."""
-enum PostType {
-  COURSE
-  COMMUNITY
+type CourseOutput {
+  """게시글 ID"""
+  _id: String!
+
+  """게시글 타입"""
+  postType: PostType!
+
+  """등록자"""
+  registerUser: User!
+
+  """등록날짜"""
+  createdAt: DateTime!
+
+  """수정날짜"""
+  updatedAt: DateTime!
+
+  """제목"""
+  title: String!
+
+  """커버 이미지 URL 리스트"""
+  coverUrls: [String!]!
+
+  """시작 날짜"""
+  startedAt: DateTime!
+
+  """소요 시간(분)"""
+  takeMinutes: String!
+
+  """소요 비용"""
+  takeCharge: String!
+
+  """태그 리스트"""
+  tags: [String!]!
+
+  """댓글 개수"""
+  cntComment: Int!
+
+  """좋아요 개수"""
+  cntLike: Int!
+}
+
+type CourseOutputPageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+type PaginatedCourse {
+  nodes: [CourseOutput!]
+  pageInfo: CourseOutputPageInfo
 }
 
 type ExistNickNameOutput {
@@ -196,50 +290,9 @@ type FileListOut {
   content: String!
 }
 
-type Community {
-  """게시글 ID"""
-  _id: String!
-
-  """게시글 타입"""
-  postType: PostType!
-
-  """like 리스트"""
-  likes: [Like!]!
-
-  """댓글 리스트"""
-  comments: [Comment!]!
-
-  """태그 리스트"""
-  tags: [Tag!]!
-
-  """등록자"""
-  registerUser: User!
-
-  """등록날짜"""
-  createdAt: DateTime!
-
-  """수정날짜"""
-  updatedAt: DateTime!
-
-  """게시글 내용"""
-  content: String!
-
-  """게시글 타입"""
-  communityType: CommunityType!
-
-  """게시글 이미지 URL 리스트"""
-  imageUrls: [String!]
-}
-
-"""커뮤니티 게시판 타입"""
-enum CommunityType {
-  FREE
-  WORRY
-}
-
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
-  courseList: [Course!]!
+  courses(next: Int = 10, after: String, before: String): PaginatedCourse!
   course(id: Int!): Course!
   tag: [Tag!]!
 

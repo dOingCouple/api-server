@@ -1,4 +1,4 @@
-import { getModelToken } from '@nestjs/mongoose'
+import { getModelToken, getConnectionToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Tag } from '~/tag/schemas/tag.schema'
 import { TagService } from '~/tag/tag.service'
@@ -23,6 +23,10 @@ describe('CourseService', () => {
         {
           provide: getModelToken(Tag.name),
           useValue: new MockUser(),
+        },
+        {
+          provide: getConnectionToken('Database'),
+          useValue: {},
         },
       ],
     }).compile()

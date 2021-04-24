@@ -15,6 +15,8 @@ import { PubSub } from 'graphql-subscriptions'
 import { CurrentUser } from '~/auth/decorators/current.user'
 import { User } from '~/user/schemas/user.schema'
 import { GqlAuthGuard } from '~/auth/guards/gql.guard'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
+import { PaginatedCourse } from './dto/paginated-course.output'
 
 const pubsub = new PubSub()
 
@@ -31,10 +33,10 @@ export class CourseResolver {
     return this.courseService.create(user, createCourseInput)
   }
 
-  @Query(() => [Course], { name: 'courseList' })
-  findAll(): Promise<Course[]> {
-    throw new HttpException('Forbidden', 12312312)
-    // return this.courseService.findAll()
+  @Query(() => PaginatedCourse, { name: 'courses' })
+  async findAll(@Args() args: PaginationArgs): Promise<PaginatedCourse> {
+    const res = await this.courseService.findAll(args)
+    return Promise.resolve(res)
   }
 
   @Query(() => Course, { name: 'course' })
