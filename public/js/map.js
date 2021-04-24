@@ -2,16 +2,21 @@
 let map = null
 let place = null
 
-setInterval(() => {
-  relayout()
-  console.log('실행')
-}, 1000)
+/**
+ * window.outerWidth
+ * window.outerHeight
+ */
+
+// setInterval(() => {
+//   relayout()
+//   console.log('실행')
+// }, 1000)
 
 document.addEventListener('DOMContentLoaded', function () {
   const container = document.getElementById('map')
   const options = {
     center: new kakao.maps.LatLng(33.450701, 126.570667),
-    level: 1,
+    level: 3,
   }
 
   map = new kakao.maps.Map(container, options)

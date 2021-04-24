@@ -61,6 +61,14 @@ type PaginatedUser {
   pageInfo: UserPageInfo
 }
 
+type Tag {
+  """Tag ID"""
+  _id: String!
+
+  """Tag 이름"""
+  name: String!
+}
+
 type Like {
   """Like Type"""
   _id: String!
@@ -126,6 +134,9 @@ type Course {
 
   """댓글 리스트"""
   comments: [Comment!]!
+
+  """태그 리스트"""
+  tags: [Tag!]!
 
   """등록자"""
   registerUser: User!
@@ -198,6 +209,9 @@ type Community {
   """댓글 리스트"""
   comments: [Comment!]!
 
+  """태그 리스트"""
+  tags: [Tag!]!
+
   """등록자"""
   registerUser: User!
 
@@ -223,18 +237,11 @@ enum CommunityType {
   WORRY
 }
 
-type Tag {
-  """Tag ID"""
-  _id: String!
-
-  """Tag 이름"""
-  name: String!
-}
-
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courseList: [Course!]!
   course(id: Int!): Course!
+  tag: [Tag!]!
 
   """자기 정보 가져오기"""
   me: Me!
@@ -250,7 +257,6 @@ type Query {
 
   """댓글 조회"""
   comments(uuid: String!): [Comment!]!
-  tag: [Tag!]!
 }
 
 input ExistNickNameInput {
@@ -300,6 +306,9 @@ input CreateCourseInput {
 
   """소요 비용"""
   takeCharge: Int!
+
+  """태그 리스트"""
+  tagNames: [String!] = []
 }
 
 input UpdateCourseInput {
@@ -317,6 +326,9 @@ input UpdateCourseInput {
 
   """소요 비용"""
   takeCharge: Int
+
+  """태그 리스트"""
+  tagNames: [String!] = []
   id: Int!
 }
 
@@ -376,6 +388,9 @@ input CreateCommunityInput {
 
   """게시글 이미지 URL 리스트"""
   imageUrls: [String!] = []
+
+  """태그 리스트"""
+  tagNames: [String!] = []
 }
 
 input CreateCommentInput {

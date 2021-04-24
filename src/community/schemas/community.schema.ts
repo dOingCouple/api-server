@@ -4,6 +4,7 @@ import { Length } from 'class-validator'
 import { Document } from 'mongoose'
 import { CommunityType, PostType } from '~/common/constants'
 import { BasePost } from '~/common/schemas/base-post.schema'
+import { Tag } from '~/tag/schemas/tag.schema'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCommunityInput } from '../dto/create-community.input'
 
@@ -32,10 +33,14 @@ export class Community extends BasePost {
 
   public static createCommunity(
     user: User,
-    createCommunity: CreateCommunityInput
+    createCommunity: CreateCommunityInput,
+    tags: Tag[]
   ): Community {
     return {
-      ...createCommunity,
+      content: createCommunity.content,
+      communityType: createCommunity.communityType,
+      imageUrls: createCommunity.imageUrls,
+      tags,
       postType: PostType.COMMUNITY,
       registerUser: user,
       createdAt: new Date(),

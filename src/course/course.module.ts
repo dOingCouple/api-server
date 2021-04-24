@@ -3,6 +3,7 @@ import { CourseService } from './course.service'
 import { CourseResolver } from './course.resolver'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Course, CourseSchema } from './schemas/course.schema'
+import { TagModule } from '~/tag/tag.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Course, CourseSchema } from './schemas/course.schema'
         schema: CourseSchema,
       },
     ]),
+    TagModule,
   ],
   providers: [CourseResolver, CourseService],
 })

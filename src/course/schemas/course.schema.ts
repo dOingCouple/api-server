@@ -5,6 +5,7 @@ import { BasePost } from '~/common/schemas/base-post.schema'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCourseInput } from '~/course/dto/create-course.input'
 import { PostType } from '~/common/constants'
+import { Tag } from '~/tag/schemas/tag.schema'
 
 export type CourseDocument = Course & Document
 
@@ -35,10 +36,16 @@ export class Course extends BasePost {
 
   public static createCourse(
     user: User,
-    createCourseInput: CreateCourseInput
+    createCourseInput: CreateCourseInput,
+    tags: Tag[]
   ): Course {
     return {
-      ...createCourseInput,
+      title: createCourseInput.title,
+      coverUrls: createCourseInput.coverUrls,
+      startedAt: createCourseInput.startedAt,
+      takeCharge: createCourseInput.takeCharge,
+      takeMinutes: createCourseInput.takeMinutes,
+      tags,
       postType: PostType.COURSE,
       registerUser: user,
       createdAt: new Date(),

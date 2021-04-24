@@ -5,6 +5,7 @@ import { User } from '~/user/schemas/user.schema'
 import { PostType } from '~/common/constants'
 import { Like } from '~/like/schemas/like.scheme'
 import { Comment } from '~/comment/schemas/comment.schema'
+import { Tag } from '~/tag/schemas/tag.schema'
 
 @Schema()
 @ObjectType()
@@ -26,6 +27,13 @@ export class BasePost {
   })
   @Field(() => [Comment], { description: '댓글 리스트', defaultValue: [] })
   comments: Comment[] = []
+
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: Tag.name }],
+    default: [],
+  })
+  @Field(() => [Tag], { description: '태그 리스트', defaultValue: [] })
+  tags: Tag[] = []
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   @Field(() => User, { description: '등록자' })

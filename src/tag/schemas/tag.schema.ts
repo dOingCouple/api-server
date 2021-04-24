@@ -13,6 +13,16 @@ export class Tag {
   @Prop({ unique: true })
   @Field(() => String, { description: 'Tag 이름' })
   name: string
+
+  @Prop()
+  createdAt: Date
+
+  public static createTag(name: string): Tag {
+    return {
+      name,
+      createdAt: new Date(),
+    } as Tag
+  }
 }
 
 export const TagSchema = SchemaFactory.createForClass(Tag)

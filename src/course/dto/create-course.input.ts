@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql'
-import { Length, Min } from 'class-validator'
+import { ArrayMaxSize, Length, Min } from 'class-validator'
 import { PostType } from '~/common/constants'
 
 @InputType()
@@ -24,4 +24,12 @@ export class CreateCourseInput {
   @Min(0)
   @Field(() => Int, { nullable: false, description: '소요 비용' })
   takeCharge: number
+
+  @ArrayMaxSize(20)
+  @Field(() => [String], {
+    nullable: true,
+    description: '태그 리스트',
+    defaultValue: [],
+  })
+  tagNames: string[]
 }

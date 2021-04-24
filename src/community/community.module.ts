@@ -3,6 +3,7 @@ import { CommunityService } from './community.service'
 import { CommunityResolver } from './community.resolver'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Community, CommunitySchema } from './schemas/community.schema'
+import { TagModule } from '~/tag/tag.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Community, CommunitySchema } from './schemas/community.schema'
         schema: CommunitySchema,
       },
     ]),
+    TagModule,
   ],
   providers: [CommunityResolver, CommunityService],
 })

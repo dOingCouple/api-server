@@ -1,5 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql'
-import { Length } from 'class-validator'
+import { InputType, Field } from '@nestjs/graphql'
+import { Length, ArrayMaxSize } from 'class-validator'
 import { CommunityType } from '~/common/constants'
 
 @InputType()
@@ -17,4 +17,12 @@ export class CreateCommunityInput {
     defaultValue: [],
   })
   imageUrls: string[]
+
+  @ArrayMaxSize(20)
+  @Field(() => [String], {
+    nullable: true,
+    description: '태그 리스트',
+    defaultValue: [],
+  })
+  tagNames: string[]
 }
