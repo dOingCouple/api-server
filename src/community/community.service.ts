@@ -4,6 +4,10 @@ import { Connection, Model } from 'mongoose'
 import { from } from 'rxjs'
 import { flatMap } from 'rxjs/internal/operators'
 import { map, tap } from 'rxjs/operators'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
+import { getCollectionName } from '~/common/utils/mongo'
+import { paginate } from '~/common/utils/pagination'
+import { Tag } from '~/tag/schemas/tag.schema'
 import { TagService } from '~/tag/tag.service'
 import { User } from '~/user/schemas/user.schema'
 import { CreateCommunityInput } from './dto/create-community.input'
@@ -33,47 +37,63 @@ export class CommunityService {
       .toPromise()
   }
 
-  findAll() {
-    return this.communityModel
-      .find()
-      .populate({
-        path: 'likes',
-        populate: {
-          path: 'registerUser',
+  findAll(args: PaginationArgs) {
+    return paginate(this.communityModel, args, [
+      {
+        $lookup: {
+          from: getCollectionName(this.connection, User.name),
+          localField: 'registerUser',
+          foreignField: '_id',
+          as: 'registerUser',
         },
-      })
-      .populate('tags')
-      .populate({
-        path: 'comments',
-        populate: [
-          {
-            path: 'registerUser',
+      },
+      {
+        $unwind: '$registerUser',
+      },
+      {
+        $lookup: {
+          from: getCollectionName(this.connection, Tag.name),
+          localField: 'tags',
+          foreignField: '_id',
+          as: 'tags',
+        },
+      },
+      {
+        $addFields: {
+          tags: '$tags.name',
+        },
+      },
+      {
+        $set: {
+          cntComment: {
+            $size: {
+              $ifNull: ['$comments', []],
+            },
           },
-          {
-            path: 'replyComments',
-            populate: [
-              {
-                path: 'registerUser',
-              },
-              {
-                path: 'targetUser',
-              },
-            ],
+          cntLike: {
+            $size: {
+              $ifNull: ['$likes', []],
+            },
           },
-        ],
-      })
-      .populate('registerUser')
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+    ])
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} community`
+  findOne(id: string) {
+    return this.communityModel.findById(id)
   }
 
-  update(id: number, updateCommunityInput: UpdateCommunityInput) {
+  update(id: string, updateCommunityInput: UpdateCommunityInput) {
     return `This action updates a #${id} community`
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} community`
   }
 }

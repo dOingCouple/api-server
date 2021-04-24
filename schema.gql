@@ -290,6 +290,53 @@ type FileListOut {
   content: String!
 }
 
+type CommunityOutput {
+  """게시글 ID"""
+  _id: String!
+
+  """게시글 타입"""
+  postType: PostType!
+
+  """등록자"""
+  registerUser: User!
+
+  """등록날짜"""
+  createdAt: DateTime!
+
+  """수정날짜"""
+  updatedAt: DateTime!
+
+  """게시글 내용"""
+  content: String!
+
+  """게시글 타입"""
+  communityType: CommunityType!
+
+  """게시글 이미지 URL 리스트"""
+  imageUrls: [String!]
+
+  """태그 리스트"""
+  tags: [String!]!
+
+  """댓글 개수"""
+  cntComment: Int!
+
+  """좋아요 개수"""
+  cntLike: Int!
+}
+
+type CommunityOutputPageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+type PaginatedCommunity {
+  nodes: [CommunityOutput!]
+  pageInfo: CommunityOutputPageInfo
+}
+
 type Query {
   users(next: Int = 10, after: String, before: String): PaginatedUser!
   courses(next: Int = 10, after: String, before: String): PaginatedCourse!
@@ -305,8 +352,8 @@ type Query {
   """일회용 비밀번호"""
   otp: OtpOutput!
   findObject: FileListOut!
-  communities: [Community!]!
-  community(id: Int!): Community!
+  communities(next: Int = 10, after: String, before: String): PaginatedCommunity!
+  community(id: String!): Community!
 
   """댓글 조회"""
   comments(uuid: String!): [Comment!]!

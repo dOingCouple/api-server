@@ -6,6 +6,8 @@ import { GqlAuthGuard } from '~/auth/guards/gql.guard'
 import { UseGuards } from '@nestjs/common'
 import { CurrentUser } from '~/auth/decorators/current.user'
 import { User } from '~/user/schemas/user.schema'
+import { PaginatedCommunity } from './dto/paginated-community.output'
+import { PaginationArgs } from '~/common/dto/page-pagination.args'
 
 @Resolver(() => Community)
 export class CommunityResolver {
@@ -20,14 +22,13 @@ export class CommunityResolver {
     return this.communityService.create(user, createCommunityInput)
   }
 
-  @Query(() => [Community], { name: 'communities' })
-  async findAll() {
-    const res = await this.communityService.findAll()
-    return res
+  @Query(() => PaginatedCommunity, { name: 'communities' })
+  async findAll(@Args() args: PaginationArgs) {
+    return this.communityService.findAll(args)
   }
 
   @Query(() => Community, { name: 'community' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.communityService.findOne(id)
   }
 }
