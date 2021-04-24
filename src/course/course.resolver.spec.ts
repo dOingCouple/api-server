@@ -1,5 +1,7 @@
 import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Tag } from '~/tag/schemas/tag.schema'
+import { TagService } from '~/tag/tag.service'
 import { CourseResolver } from './course.resolver'
 import { CourseService } from './course.service'
 
@@ -15,8 +17,13 @@ describe('CourseResolver', () => {
       providers: [
         CourseResolver,
         CourseService,
+        TagService,
         {
           provide: getModelToken('Course'),
+          useValue: new MockUser(),
+        },
+        {
+          provide: getModelToken(Tag.name),
           useValue: new MockUser(),
         },
       ],

@@ -1,5 +1,7 @@
 import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Tag } from '~/tag/schemas/tag.schema'
+import { TagService } from '~/tag/tag.service'
 import { CommunityResolver } from './community.resolver'
 import { CommunityService } from './community.service'
 
@@ -15,8 +17,13 @@ describe('CommunityResolver', () => {
       providers: [
         CommunityResolver,
         CommunityService,
+        TagService,
         {
           provide: getModelToken('Community'),
+          useValue: new MockUser(),
+        },
+        {
+          provide: getModelToken(Tag.name),
           useValue: new MockUser(),
         },
       ],

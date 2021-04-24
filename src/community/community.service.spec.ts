@@ -1,5 +1,7 @@
 import { getModelToken } from '@nestjs/mongoose'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Tag } from '~/tag/schemas/tag.schema'
+import { TagService } from '~/tag/tag.service'
 import { CommunityService } from './community.service'
 
 describe('CommunityService', () => {
@@ -13,8 +15,13 @@ describe('CommunityService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CommunityService,
+        TagService,
         {
           provide: getModelToken('Community'),
+          useValue: new MockUser(),
+        },
+        {
+          provide: getModelToken(Tag.name),
           useValue: new MockUser(),
         },
       ],
